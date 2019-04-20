@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.MediaController;
 import android.widget.VideoView;
-
 import com.wisn.medial.R;
 
 /**
@@ -41,7 +39,7 @@ public class VideoViewActivity extends Activity {
                     mp.release();
                     mp = new MediaPlayer();
                 }
-//                mp.setVolume(0, 0);//静音播放
+                mp.setVolume(0, 0);//静音播放
                 mp.setLooping(true);
                 mp.start();
             }

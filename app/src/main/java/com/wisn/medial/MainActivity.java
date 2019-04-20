@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.wisn.medial.ad.ImageSlideAcitivity;
 import com.wisn.medial.ad.VideoViewActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         int id = view.getId();
         switch (id){
             case R.id.bt_ad:
-                startActivity(new Intent(this, VideoViewActivity.class));
+//                startActivity(new Intent(this, VideoViewActivity.class));
+                startActivity(new Intent(this, ImageSlideAcitivity.class));
                 break;
             case R.id.bt_imglist:
                 break;
