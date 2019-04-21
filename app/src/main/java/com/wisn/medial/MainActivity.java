@@ -8,6 +8,7 @@ import android.view.View;
 import com.wisn.medial.ad.ImageSlideAcitivity;
 import com.wisn.medial.ad.ExoPlayerActivity;
 import com.wisn.medial.ad.VideoViewActivity;
+import com.wisn.medial.imagelist.ImageListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ImageSlideAcitivity.class));
                 break;
             case R.id.bt_imglist:
+                startActivity(new Intent(this, ImageListActivity.class));
+
                 break;
             case R.id.bt_videoimglist:
                 break;
