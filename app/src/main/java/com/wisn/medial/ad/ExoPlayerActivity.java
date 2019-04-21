@@ -1,4 +1,4 @@
-package com.wisn.medial.exoplayer;
+package com.wisn.medial.ad;
 
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -81,6 +81,7 @@ public class ExoPlayerActivity extends AppCompatActivity {
 //        Uri uri = Uri.parse(Constants.ip + "video_ccc.mp4");
 //        MediaSource mediaSource = buildMediaSource(uri);
         List<Uri> urls=new ArrayList<>();
+        urls.add(Uri.parse(Constants.ip + "video_ddd.mkv"));
         urls.add(Uri.parse(Constants.ip + "video_aaa.mp4"));
         urls.add(Uri.parse(Constants.ip + "video_bbb.mp4"));
         urls.add(Uri.parse(Constants.ip + "video_ccc.mp4"));

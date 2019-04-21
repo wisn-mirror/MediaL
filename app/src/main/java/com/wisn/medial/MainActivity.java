@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.wisn.medial.ad.ImageSlideAcitivity;
+import com.wisn.medial.ad.ExoPlayerActivity;
 import com.wisn.medial.ad.VideoViewActivity;
-import com.wisn.medial.exoplayer.ExoPlayerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,14 +16,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-    public void onClick(View view){
+
+    public void onClick(View view) {
         int id = view.getId();
-        switch (id){
+        switch (id) {
             case R.id.bt_ad_video:
-//                startActivity(new Intent(this, VideoViewActivity.class));
+                startActivity(new Intent(this, VideoViewActivity.class));
+                break;
+            case R.id.bt_ad_videoexplayer:
                 startActivity(new Intent(this, ExoPlayerActivity.class));
                 break;
-                case R.id.bt_ad_image:
+            case R.id.bt_ad_image:
                 startActivity(new Intent(this, ImageSlideAcitivity.class));
                 break;
             case R.id.bt_imglist:
