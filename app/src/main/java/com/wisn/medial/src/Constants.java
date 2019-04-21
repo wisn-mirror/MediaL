@@ -4,6 +4,7 @@ package com.wisn.medial.src;
  * Created by Wisn on 2019/4/20 下午5:12.
  */
 public class Constants {
+    public static final String ip = "http://192.168.1.111:8080/";
     public static final String[] res = {
             "http://img.hb.aicdn.com/3e1247e78d3f3fbe744acf4908be5ee36212fd1d1852b-DHtPYL_sq320",
             "http://img.hb.aicdn.com/5ca18a36a5c2fb3acc1e63b6a3df1287643b7aec11849-xWzSg2_sq320",

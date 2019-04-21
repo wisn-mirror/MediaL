@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".exoplayer.ExoPlayerActivity"></activity>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -27,6 +29,7 @@
         </activity>
         <activity android:name=".ad.VideoViewActivity" />
         <activity android:name=".ad.ImageSlideAcitivity" />
+        <activity android:name=".exoplayer.ExoPlayerActivity" />
     </application>
 
 </manifest>

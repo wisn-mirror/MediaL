@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.VideoView;
 import com.wisn.medial.R;
+import com.wisn.medial.src.Constants;
 
 /**
  * Created by Wisn on 2019/4/20 下午3:22.
@@ -16,7 +17,6 @@ public class VideoViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
         VideoView videoView = (VideoView) findViewById(R.id.main_video);
-//        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"jiaoxue.mp4";
         /**
          * 本地播放
          */
@@ -24,7 +24,7 @@ public class VideoViewActivity extends Activity {
         /**
          * 网络播放
          */
-        videoView.setVideoURI(Uri.parse("http://192.168.1.110:8080/video_ccc.mp4"));
+        videoView.setVideoURI(Uri.parse(Constants.ip+"video_ccc.mp4"));
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
