@@ -33,6 +33,7 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class DownloadUrlConnection implements DownloadConnection, DownloadConnection.Connected {
 
     protected URLConnection connection;

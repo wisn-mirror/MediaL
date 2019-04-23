@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.download.connect;
+package com.download.core.connection;
 
 import android.support.annotation.NonNull;
 
 import com.download.RedirectUtil;
-import com.download.core.connection.DownloadConnection;
 
 import java.io.IOException;
 import java.io.InputStream;

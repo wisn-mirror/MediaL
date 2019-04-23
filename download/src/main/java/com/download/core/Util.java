@@ -34,7 +34,7 @@ import android.util.Log;
 import com.download.BuildConfig;
 import com.download.DownloadTask;
 import com.download.OkDownload;
-import com.download.connect.DownloadOkHttp3Connection;
+import com.download.core.connection.DownloadOkHttp3Connection;
 import com.download.core.breakpoint.BlockInfo;
 import com.download.core.breakpoint.BreakpointInfo;
 import com.download.core.breakpoint.DownloadStore;
