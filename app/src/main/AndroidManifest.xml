@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.wisn.medial">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
     <application
@@ -13,10 +15,8 @@
         android:networkSecurityConfig="@xml/httpxenable"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".imagelist.ImageListActivity"></activity>
-        <activity android:name=".ad.ExoPlayerActivity" />
-
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -30,7 +30,10 @@
         </activity>
         <activity android:name=".ad.VideoViewActivity" />
         <activity android:name=".ad.ImageSlideAcitivity" />
+        <activity android:name=".download.DownloadListActivity" />
+        <activity android:name=".imagelist.ImageListActivity"></activity>
         <activity android:name=".ad.ExoPlayerActivity" />
+
     </application>
 
 </manifest>

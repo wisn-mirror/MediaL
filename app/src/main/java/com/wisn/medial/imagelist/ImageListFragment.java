@@ -30,7 +30,6 @@ public class ImageListFragment extends Fragment {
         recycler_view = mContextView.findViewById(R.id.recycler_view);
         initView(mContextView);
         return mContextView;
-
     }
 
     private void initView(View mContextView) {
@@ -48,7 +47,7 @@ public class ImageListFragment extends Fragment {
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 ImageView imageView = (ImageView) viewHolder.itemView;
                 int screenWidth =ImageListFragment.this.getContext().getResources().getDisplayMetrics().widthPixels;
-                imageView.setLayoutParams(new ViewGroup.LayoutParams(screenWidth / 3, screenWidth / 5));
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(screenWidth / 3, screenWidth / 3));
                 GlideApp.with(ImageListFragment.this.getContext()).load(Constants.res[i]).into(imageView);
             }
 
