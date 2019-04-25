@@ -33,6 +33,8 @@
         <activity android:name=".download.DownloadListActivity" />
         <activity android:name=".imagelist.ImageListActivity"></activity>
         <activity android:name=".ad.ExoPlayerActivity" />
+        <activity android:name=".imagelist.FullScreenImageActivity"
+            android:theme="@style/TransparentWindow"/>
 
     </application>
 
