@@ -21,6 +21,7 @@ import android.widget.RadioGroup;
 
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
+import com.wisn.medial.imagelist.preview.FullScreenImageActivity;
 import com.wisn.medial.src.Constants;
 
 import java.util.List;
@@ -73,45 +74,11 @@ public class ImageListFragment extends Fragment {
                     public void onClick(View v) {
                         int checkedRadioButtonId = rg_select.getCheckedRadioButtonId();
                         if (checkedRadioButtonId == R.id.rb_SharedElement) {
-                            mEnterPosition = mExitPosition = position;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                imageView.setTransitionName(String.valueOf(position));
-                            }
-                            ImageListFragment.this.getActivity(). setExitSharedElementCallback(new SharedElementCallback() {
-                                @Override
-                                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                                    Log.e("onBindViewHolder","names size："+ names.size()+" sharedElements:"+sharedElements.size());
-                                    for(String position:names){
-                                        int i = Integer.parseInt(position);
-                                        RecyclerView.ViewHolder viewHolderForAdapterPosition = recycler_view.findViewHolderForAdapterPosition(i);
-                                        if(viewHolderForAdapterPosition!=null&&viewHolderForAdapterPosition.itemView!=null){
-                                            sharedElements.put(position,  viewHolderForAdapterPosition.itemView);
-                                        }
-                                    }
-                                    if(sharedElements==null||sharedElements.size()==0){
-                                        names.clear();
-                                    }
-                                }
-                            });
-                            //获取最后一个可见view的位置
-                            int lastItemPosition = layout.findLastVisibleItemPosition();
-                            //获取第一个可见view的位置
-                            int firstItemPosition = layout.findFirstVisibleItemPosition();
-
-                            Intent intent = new Intent(getContext(), FullScreenImageActivity.class);
-                            intent.putExtra(FullScreenImageActivity.EXTRA_DEFAULT_INDEX, position);
-                            intent.putExtra(FullScreenImageActivity.lastItemPosition, lastItemPosition);
-                            intent.putExtra(FullScreenImageActivity.firstItemPosition, firstItemPosition);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                                        imageView, ViewCompat.getTransitionName(imageView) ).toBundle();
-                                ActivityCompat.startActivity(getContext(), intent,
-                                        bundle);
-//                                ImageListFragment.this.getActivity().startActivity(intent, bundle);
-                                Log.e("onBindViewHolder","ActivityOptionsCompat "+position);
-
-                            }
+                            //共享元素的方式
+                            shareElements(position, imageView);
                         } else if (checkedRadioButtonId == R.id.rb_Animator) {
+
+                        } else if (checkedRadioButtonId == R.id.rb_bigImageView) {
 
                         }
                     }
@@ -125,12 +92,52 @@ public class ImageListFragment extends Fragment {
         });
     }
 
-//    public void onActivityReenter(int resultCode, Intent data) {
-//        if (resultCode == RESULT_OK && data != null) {
-//            mExitPosition = data.getIntExtra(FullScreenImageActivity.EXTRA_EXIT_INDEX, -1);
-//        }
-//    }
+    /**
+     * 共享元素的方式
+     *
+     * @param position
+     * @param imageView
+     */
+    private void shareElements(int position, ImageView imageView) {
+        mEnterPosition = mExitPosition = position;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setTransitionName(String.valueOf(position));
+        }
+        ImageListFragment.this.getActivity().setExitSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                Log.e("onBindViewHolder", "names size：" + names.size() + " sharedElements:" + sharedElements.size());
+                for (String position : names) {
+                    int i = Integer.parseInt(position);
+                    RecyclerView.ViewHolder viewHolderForAdapterPosition = recycler_view.findViewHolderForAdapterPosition(i);
+                    if (viewHolderForAdapterPosition != null && viewHolderForAdapterPosition.itemView != null) {
+                        sharedElements.put(position, viewHolderForAdapterPosition.itemView);
+                    }
+                }
+                if (sharedElements == null || sharedElements.size() == 0) {
+                    names.clear();
+                }
+            }
+        });
+        //获取最后一个可见view的位置
+        int lastItemPosition = layout.findLastVisibleItemPosition();
+        //获取第一个可见view的位置
+        int firstItemPosition = layout.findFirstVisibleItemPosition();
 
+        Intent intent = new Intent(getContext(), FullScreenImageActivity.class);
+        intent.putExtra(FullScreenImageActivity.EXTRA_DEFAULT_INDEX, position);
+        intent.putExtra(FullScreenImageActivity.lastItemPosition, lastItemPosition);
+        intent.putExtra(FullScreenImageActivity.firstItemPosition, firstItemPosition);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                    imageView, ViewCompat.getTransitionName(imageView)).toBundle();
+            ActivityCompat.startActivity(getContext(), intent,
+                    bundle);
+//                                ImageListFragment.this.getActivity().startActivity(intent, bundle);
+            Log.e("onBindViewHolder", "ActivityOptionsCompat " + position);
+
+        }
+    }
     static class ViewHoderM extends RecyclerView.ViewHolder {
         public ViewHoderM(@NonNull View itemView) {
             super(itemView);

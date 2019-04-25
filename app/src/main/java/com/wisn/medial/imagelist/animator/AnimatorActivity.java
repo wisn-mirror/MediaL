@@ -1,4 +1,4 @@
-package com.wisn.medial.imagelist;
+package com.wisn.medial.imagelist.animator;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

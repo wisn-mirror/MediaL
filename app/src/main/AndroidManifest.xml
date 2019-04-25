@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".imagelist.AnimatorActivity"></activity>
+        <activity android:name=".imagelist.animator.AnimatorActivity"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -47,7 +47,7 @@
             android:name=".ad.ExoPlayerActivity"
             android:theme="@style/activity" />
         <activity
-            android:name=".imagelist.FullScreenImageActivity"
+            android:name=".imagelist.preview.FullScreenImageActivity"
             android:theme="@style/TransparentWindow" />
     </application>
 

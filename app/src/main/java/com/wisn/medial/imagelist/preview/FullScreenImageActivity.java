@@ -1,4 +1,4 @@
-package com.wisn.medial.imagelist;
+package com.wisn.medial.imagelist.preview;
 
 import android.app.SharedElementCallback;
 import android.content.Intent;

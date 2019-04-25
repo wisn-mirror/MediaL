@@ -1,4 +1,4 @@
-package com.wisn.medial.imagelist;
+package com.wisn.medial.imagelist.preview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
