@@ -12,5 +12,11 @@
     <ImageView
         android:id="@+id/iv_target"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <com.wisn.medial.imagelist.ImageViewPager
+        android:id="@+id/vp_target"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

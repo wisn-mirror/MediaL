@@ -94,8 +94,8 @@ public class ImageSlideAcitivity extends Activity {
         };
         vp_scroll.setAdapter(adapter);
         //修改滑动速度
-       final MyScroller myScroller = new MyScroller(this);
-        myScroller.setmDuration(1000);
+        final MyScroller myScroller = new MyScroller(this);
+        myScroller.setmDuration(2000);
         myScroller.acttchToViewPager(vp_scroll);
         vp_scroll.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
