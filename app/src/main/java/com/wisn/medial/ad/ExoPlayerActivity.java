@@ -1,36 +1,23 @@
 package com.wisn.medial.ad;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.wisn.medial.R;
 import com.wisn.medial.src.Constants;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -69,6 +56,9 @@ public class ExoPlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exo_player);
+        //全屏
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+                WindowManager.LayoutParams. FLAG_FULLSCREEN);
         playerView = findViewById(R.id.playerView);
         player = ExoPlayerFactory.newSimpleInstance(this);
 //        player = ExoPlayerFactory.newSimpleInstance( new DefaultRenderersFactory(this),
@@ -81,12 +71,13 @@ public class ExoPlayerActivity extends AppCompatActivity {
 //        Uri uri = Uri.parse(Constants.ip + "video_ccc.mp4");
 //        MediaSource mediaSource = buildMediaSource(uri);
         List<Uri> urls=new ArrayList<>();
-        urls.add(Uri.parse(Constants.ip + "video_ddd.mkv"));
-        urls.add(Uri.parse(Constants.ip + "video_aaa.mp4"));
-        urls.add(Uri.parse(Constants.ip + "video_bbb.mp4"));
-        urls.add(Uri.parse(Constants.ip + "video_ccc.mp4"));
+        for(String res:Constants.local_resvideo){
+            urls.add(Uri.parse(Constants.ip + res));
+        }
         MediaSource mediaSource = buildMediaSources(urls);
         player.prepare(mediaSource, true, false);
+//        params.screenBrightness
+        player.setRepeatMode(Player.REPEAT_MODE_ALL);
         player.addListener(new Player.DefaultEventListener() {
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {

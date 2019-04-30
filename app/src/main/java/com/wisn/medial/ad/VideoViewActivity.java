@@ -24,7 +24,7 @@ public class VideoViewActivity extends Activity {
         /**
          * 网络播放
          */
-        videoView.setVideoURI(Uri.parse(Constants.ip+"video_ccc.mp4"));
+        videoView.setVideoURI(Uri.parse(Constants.ip+Constants.local_resvideo[0]));
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {

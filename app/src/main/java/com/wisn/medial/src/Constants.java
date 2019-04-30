@@ -4,7 +4,30 @@ package com.wisn.medial.src;
  * Created by Wisn on 2019/4/20 下午5:12.
  */
 public class Constants {
-    public static final String ip = "http://192.168.1.111:8080/";
+//    public static final String ip = "http://192.168.1.111:8080/";
+    public static final String ip = "http://192.168.132.35:8080/";
+    public static final String[] local_resimage = {
+            "media/image/pic_long_weidht.png",//0  6.4M
+            "media/image/gif_200*150.gif",//1   20.7M
+            "media/image/gif_208*152.gif",//2  19.9M
+            "media/image/gif_212*270.gif",//3   9.2M
+            "media/image/gif_280*400.gif",//4   5.4M
+            "media/image/gif_480*480.gif",//5   18.8M
+            "media/image/gif_800*600.gif",//6   8.3M
+            "media/image/pic_2668*2000.jpg",//7  2.5M
+            "media/image/pic_4000*2667.jpg",//8  3M
+            "media/image/pic_7800*6240.png",//9  2.6M
+            "media/image/pic_20032*20032.png",//10 55.3M
+            "media/image/pic_long_height.png",//11  6.4M
+    };
+
+    public static final String[] local_resvideo = {
+            "media/video/video_aaa.mp4",
+            "media/video/video_bbb.mp4",
+            "media/video/video_ccc.mp4",
+            "media/video/video_ddd.mkv"
+    };
+
     public static final String[] res = {
             "http://img.hb.aicdn.com/3e1247e78d3f3fbe744acf4908be5ee36212fd1d1852b-DHtPYL_sq320",
             "http://img.hb.aicdn.com/5ca18a36a5c2fb3acc1e63b6a3df1287643b7aec11849-xWzSg2_sq320",
@@ -131,6 +154,18 @@ public class Constants {
             "http://img.hb.aicdn.com/b237b43b475642df0f4bd9a8e6df10002da42c3316530-7hx6ho_sq320",
             "http://img.hb.aicdn.com/aac4e8146a6b14f48f6983c9afe4aa7e0e5fa79811f1a-6bJ8FY_sq320",
             "http://img.hb.aicdn.com/52abfb758d9c4f88fc648414037665c837f586cc1a62a-uW5yjm_sq320",
-            "http://img.hb.aicdn.com/6775e359b4f49e28c00143db622e5e045bb08ce61390a-1wO40p_sq320"
+            "http://img.hb.aicdn.com/6775e359b4f49e28c00143db622e5e045bb08ce61390a-1wO40p_sq320",
+            ip+local_resimage[0],
+            ip+local_resimage[1],
+            ip+local_resimage[2],
+            ip+local_resimage[3],
+            ip+local_resimage[4],
+            ip+local_resimage[5],
+            ip+local_resimage[6],
+            ip+local_resimage[7],
+            ip+local_resimage[8],
+            ip+local_resimage[9],
+//            ip+local_resimage[10],
+            ip+local_resimage[11],
     };
 }

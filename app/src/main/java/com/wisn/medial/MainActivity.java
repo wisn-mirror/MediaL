@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bt_downloadlist:
                 startActivity(new Intent(this, DownloadListActivity.class));
                 break;
+            case R.id.bt_scale:
+                startActivity(new Intent(this, DownloadListActivity.class));
+                break;
 
         }
     }

@@ -23,9 +23,4 @@ public class ImageListActivity extends AppCompatActivity {
 
     }
 
-//    public void onActivityReenter(int resultCode, Intent data) {
-//        if (imageListFragment != null) {
-//            imageListFragment.onActivityReenter(resultCode, data);
-//        }
-//    }
 }

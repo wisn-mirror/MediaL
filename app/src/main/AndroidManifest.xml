@@ -45,6 +45,10 @@
             android:theme="@style/activity" />
         <activity
             android:name=".ad.ExoPlayerActivity"
+            android:theme="@style/activity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".scale.ScaleActivity"
             android:theme="@style/activity" />
         <activity
             android:name=".imagelist.preview.FullScreenImageActivity"

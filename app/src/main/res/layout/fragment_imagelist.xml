@@ -22,11 +22,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Animator" />
-        <RadioButton
+      <!--  <RadioButton
             android:id="@+id/rb_bigImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bigImageView" />
+            android:text="bigImageView" />-->
     </RadioGroup>
 
     <android.support.v7.widget.RecyclerView
