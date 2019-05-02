@@ -4,8 +4,8 @@ package com.wisn.medial.src;
  * Created by Wisn on 2019/4/20 下午5:12.
  */
 public class Constants {
-//    public static final String ip = "http://192.168.1.111:8080/";
-    public static final String ip = "http://192.168.132.35:8080/";
+    public static final String ip = "http://192.168.1.111:8080/";
+//    public static final String ip = "http://192.168.132.35:8080/";
     public static final String[] local_resimage = {
             "media/image/pic_long_weidht.png",//0  6.4M
             "media/image/gif_200*150.gif",//1   20.7M
@@ -165,7 +165,7 @@ public class Constants {
             ip+local_resimage[7],
             ip+local_resimage[8],
             ip+local_resimage[9],
-//            ip+local_resimage[10],
+            ip+local_resimage[10],
             ip+local_resimage[11],
     };
 }

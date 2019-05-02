@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -23,11 +24,14 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
+import com.wisn.medial.imagelist.FingerDragHelper;
+import com.wisn.medial.imagelist.photoview.PhotoView;
+import com.wisn.medial.imagelist.subscale.SubsamplingScaleImageView;
 import com.wisn.medial.src.Constants;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * Created by Wisn on 2019-04-25 10:36.
@@ -39,7 +43,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
     public static final String lastItemPosition = "lastItemPosition";
     public static final String firstItemPosition = "firstItemPosition";
 
-    private WeakHashMap<String, View> mTransitionNameToView = new WeakHashMap<>();
+    private HashMap<String, View> mTransitionNameToView = new HashMap<>();
     private ImageView iv_target;
     private int defaultIndex;
     private ViewPager vp_target;
@@ -54,6 +58,8 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
 //        oneImage();
         vpImage();
+
+
 
     }
 
@@ -78,23 +84,44 @@ public class FullScreenImageActivity extends AppCompatActivity {
             @NonNull
             @Override
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                ImageView imageView = new ImageView(FullScreenImageActivity.this);
-                container.addView(imageView);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mTransitionNameToView.put(String.valueOf(position), imageView);
-                    imageView.setTransitionName(String.valueOf(position));
-                }
-                imageView.setOnClickListener(new View.OnClickListener() {
+                View convertView = View.inflate(FullScreenImageActivity.this, R.layout.item_preview, null);
+                final ProgressBar progressBar = convertView.findViewById(R.id.progress_view);
+                final FingerDragHelper fingerDragHelper = convertView.findViewById(R.id.fingerDragHelper);
+                final SubsamplingScaleImageView scaleView = convertView.findViewById(R.id.photo_view);
+                final PhotoView imageGif = convertView.findViewById(R.id.gif_view);
+                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+                scaleView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
+                scaleView.setDoubleTapZoomDuration(200);
+                scaleView.setMinScale(1f);
+                scaleView.setMaxScale(5f);
+                scaleView.setDoubleTapZoomScale(3f);
+                scaleView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+                imageGif.setZoomTransitionDuration(200);
+                imageGif.setMinimumScale(0.7f);
+                imageGif.setMaximumScale(5f);
+                imageGif.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageGif.setVisibility(View.VISIBLE);
+                scaleView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                container.addView(convertView);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    mTransitionNameToView.put(String.valueOf(position), imageGif);
+//                    imageGif.setTransitionName(String.valueOf(position));
+//                }
+                View put = mTransitionNameToView.put(String.valueOf(position), imageGif);
+                imageGif.setTransitionName(String.valueOf(position));
+                imageGif.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        defaultIndex = position;
                         if (position <= lastPosition && position >= firstPosition) {
-                            defaultIndex = position;
                             finishAfterTransition();
                         } else {
                             finish();
                         }
                     }
                 });
+
                 GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
                         .onlyRetrieveFromCache(true)
                         .listener(new RequestListener<Drawable>() {
@@ -106,11 +133,10 @@ public class FullScreenImageActivity extends AppCompatActivity {
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 if (defaultIndex == position) {
-                                    imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                    imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                                         @Override
                                         public boolean onPreDraw() {
-                                            imageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                                            Log.e("onBindViewHolder", "onPreDraw ");
+                                            imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
                                             supportStartPostponedEnterTransition();
                                             return false;
                                         }
@@ -118,8 +144,8 @@ public class FullScreenImageActivity extends AppCompatActivity {
                                 }
                                 return false;
                             }
-                        }).into(imageView);
-                return imageView;
+                        }).into(imageGif);
+                return convertView;
             }
 
             @Override
@@ -133,6 +159,23 @@ public class FullScreenImageActivity extends AppCompatActivity {
         };
         vp_target.setAdapter(adapter);
         vp_target.setCurrentItem(defaultIndex);
+        vp_target.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                defaultIndex = i;
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
 
@@ -167,7 +210,6 @@ public class FullScreenImageActivity extends AppCompatActivity {
                             @Override
                             public boolean onPreDraw() {
                                 iv_target.getViewTreeObserver().removeOnPreDrawListener(this);
-                                Log.e("onBindViewHolder", "onPreDraw ");
                                 supportStartPostponedEnterTransition();
                                 return false;
                             }
@@ -192,14 +234,16 @@ public class FullScreenImageActivity extends AppCompatActivity {
             setEnterSharedElementCallback(new SharedElementCallback() {
                 @Override
                 public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                    Log.e("onBindViewHolder ", "111setEnterSharedElementCallback:names size：" + names.size() + " sharedElements:" + sharedElements.size());
+
                     names.clear();
                     sharedElements.clear();
                     names.add(String.valueOf(defaultIndex));
+//
                     View view = mTransitionNameToView.get(String.valueOf(defaultIndex));
-//                    if (view != null) {
-//                        sharedElements.put(String.valueOf(defaultIndex), view);
-//                    }
-                    sharedElements.put(String.valueOf(defaultIndex), view);
+                    if (view != null) {
+                        sharedElements.put(String.valueOf(defaultIndex), view);
+                    }
 
                 }
             });

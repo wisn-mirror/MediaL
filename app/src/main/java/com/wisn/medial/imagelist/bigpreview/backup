@@ -1,0 +1,116 @@
+    View imageView = null;
+
+                try {
+                    File file = Glide.with(FullScreenImageActivity.this).downloadOnly().load(Constants.res[position]).onlyRetrieveFromCache(true).submit().get();
+                    if(file==null||!file.exists()){
+                        //
+                    }else{
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inJustDecodeBounds = true;
+                        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                        String type = options.outMimeType;
+                        if("gif".equalsIgnoreCase(type)){
+                            PhotoView   imageGif=new PhotoView(FullScreenImageActivity.this);
+                            imageGif.setZoomTransitionDuration(200);
+                            imageGif.setMinimumScale(0.7f);
+                            imageGif.setMaximumScale(5f);
+                            imageGif.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            imageView=imageGif;
+                            GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
+                                    .onlyRetrieveFromCache(true)
+                                    .listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            if (defaultIndex == position) {
+                                                imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                                    @Override
+                                                    public boolean onPreDraw() {
+                                                        imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                        Log.e("onBindViewHolder", "onPreDraw ");
+                                                        supportStartPostponedEnterTransition();
+                                                        return false;
+                                                    }
+                                                });
+                                            }
+                                            return false;
+                                        }
+                                    }).into(imageGif);
+                        }else{
+                            SubsamplingScaleImageView   ScaleView=new SubsamplingScaleImageView(FullScreenImageActivity.this);
+                            ScaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+                            ScaleView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
+                            ScaleView.setDoubleTapZoomDuration(200);
+                            ScaleView.setMinScale(1f);
+                            ScaleView.setMaxScale(5f);
+                            ScaleView.setDoubleTapZoomScale(3f);
+                            ScaleView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+                            ImageSource imageSource = ImageSource.uri(Uri.fromFile(file));
+//                            if (ImageUtil.isBmpImageWithMime(imagePath)) {
+//                                imageSource.tilingDisabled();
+//                            }
+                            ScaleView.setImage(imageSource);
+
+                            ScaleView.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
+                                @Override public void onReady() {
+                                    if (defaultIndex == position) {
+                                        ScaleView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                            @Override
+                                            public boolean onPreDraw() {
+                                                ScaleView.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                Log.e("onBindViewHolder", "onPreDraw ");
+                                                supportStartPostponedEnterTransition();
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override public void onImageLoaded() {
+
+                                }
+
+                                @Override public void onPreviewLoadError(Exception e) {
+
+                                }
+
+                                @Override public void onImageLoadError(Exception e) {
+
+                                }
+
+                                @Override public void onTileLoadError(Exception e) {
+
+                                }
+
+                                @Override public void onPreviewReleased() {
+
+                                }
+                            });
+                            imageView=ScaleView;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                container.addView(imageView);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mTransitionNameToView.put(String.valueOf(position), imageView);
+                    imageView.setTransitionName(String.valueOf(position));
+                }
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (position <= lastPosition && position >= firstPosition) {
+                            defaultIndex = position;
+                            finishAfterTransition();
+                        } else {
+                            finish();
+                        }
+                    }
+                });

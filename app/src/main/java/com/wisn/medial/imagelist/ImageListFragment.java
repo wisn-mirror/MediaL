@@ -78,8 +78,6 @@ public class ImageListFragment extends Fragment {
                             shareElements(position, imageView);
                         } else if (checkedRadioButtonId == R.id.rb_Animator) {
 
-                        } else if (checkedRadioButtonId == R.id.rb_bigImageView) {
-
                         }
                     }
                 });
@@ -106,7 +104,10 @@ public class ImageListFragment extends Fragment {
         ImageListFragment.this.getActivity().setExitSharedElementCallback(new SharedElementCallback() {
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                Log.e("onBindViewHolder", "names size：" + names.size() + " sharedElements:" + sharedElements.size());
+                Log.e("onBindViewHolder", "setExitSharedElementCallback:names size：" + names.size() + " sharedElements:" + sharedElements.size());
+//                if (sharedElements == null || sharedElements.size() == 0) {
+//                    names.clear();
+//                }
                 for (String position : names) {
                     int i = Integer.parseInt(position);
                     RecyclerView.ViewHolder viewHolderForAdapterPosition = recycler_view.findViewHolderForAdapterPosition(i);
@@ -114,9 +115,7 @@ public class ImageListFragment extends Fragment {
                         sharedElements.put(position, viewHolderForAdapterPosition.itemView);
                     }
                 }
-                if (sharedElements == null || sharedElements.size() == 0) {
-                    names.clear();
-                }
+
             }
         });
         //获取最后一个可见view的位置
