@@ -2,6 +2,8 @@ package com.wisn.medial.imagelist.preview;
 
 import android.app.SharedElementCallback;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +50,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
     private int defaultIndex;
     private ViewPager vp_target;
     private PagerAdapter adapter;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,12 +58,23 @@ public class FullScreenImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fullscreenimage);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
+//下面这句表示在intent中拿到bitmap对应的数组
+       byte[] res = getIntent().getByteArrayExtra("bitmap");
+        bitmap = getPicFromBytes(res,null);
 //        oneImage();
         vpImage();
 
 
 
+    }
+    //下面的这个方法是将byte数组转化为Bitmap对象的一个方法
+    public static Bitmap getPicFromBytes(byte[] bytes, BitmapFactory.Options opts) {
+        if (bytes != null)
+            if (opts != null)
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,  opts);
+            else
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return null;
     }
 
     private void vpImage() {
@@ -121,7 +135,6 @@ public class FullScreenImageActivity extends AppCompatActivity {
                         }
                     }
                 });
-
                 GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
                         .onlyRetrieveFromCache(true)
                         .listener(new RequestListener<Drawable>() {
@@ -145,6 +158,9 @@ public class FullScreenImageActivity extends AppCompatActivity {
                                 return false;
                             }
                         }).into(imageGif);
+
+
+
                 return convertView;
             }
 

@@ -1,6 +1,7 @@
 package com.wisn.medial.imagelist;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.wisn.medial.R;
 import com.wisn.medial.imagelist.preview.FullScreenImageActivity;
 import com.wisn.medial.src.Constants;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +130,15 @@ public class ImageListFragment extends Fragment {
         intent.putExtra(FullScreenImageActivity.lastItemPosition, lastItemPosition);
         intent.putExtra(FullScreenImageActivity.firstItemPosition, firstItemPosition);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            imageView.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(imageView.getDrawingCache());
+            imageView.setDrawingCacheEnabled(false);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();//初始化一个流对象
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, output);//把bitmap100%高质量压缩 到 output对象里
+            byte[] result = output.toByteArray();//转换成功了  result就是一个bit的资源数组
+            //使用byte数组传递数据
+            intent.putExtra("bitmap",result);
             Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
                     imageView, ViewCompat.getTransitionName(imageView)).toBundle();
             ActivityCompat.startActivity(getContext(), intent,

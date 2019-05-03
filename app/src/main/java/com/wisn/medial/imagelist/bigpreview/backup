@@ -114,3 +114,77 @@
                         }
                     }
                 });
+
+
+
+
+
+   if(bitmap!=null&&defaultIndex == position){
+                     FullScreenImageActivity.this.setEnterSharedElementCallback(new SharedElementCallback() {
+                         @Override
+                         public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                             Log.e("onBindViewHolder ", "111setEnterSharedElementCallbackeeeee:names size：" + names.size() + " sharedElements:" + sharedElements.size());
+
+                         }
+
+                         @Override
+                         public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                             super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+                             Log.e("onBindViewHolder ", "onSharedElementEnd:names ：" );
+ //                            GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
+ //                                    .skipMemoryCache(true) // 不使用内存缓存
+ ////                                    .onlyRetrieveFromCache(true)
+ //                                    .into(imageGif);
+                         }
+
+                         @Override
+                         public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                             super.onSharedElementStart(sharedElementNames, sharedElements, sharedElementSnapshots);
+                             Log.e("onBindViewHolder ", "onSharedElementStart:names ：" );
+                         }
+
+                     });
+                     imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                         @Override
+                         public boolean onPreDraw() {
+                             imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
+                             supportStartPostponedEnterTransition();
+                             return false;
+                         }
+                     });
+                     imageGif.setImageBitmap(bitmap);
+                     imageGif.postDelayed(new Runnable() {
+                         @Override
+                         public void run() {
+                             GlideApp.with(FullScreenImageActivity.this.getApplicationContext()).load(Constants.res[position])
+ //                                    .skipMemoryCache(true) // 不使用内存缓存
+ //                                    .onlyRetrieveFromCache(true)
+                                     .into(imageGif);
+                         }
+                     },400);
+
+                 }else{
+                     GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
+                             .onlyRetrieveFromCache(true)
+                             .listener(new RequestListener<Drawable>() {
+                                 @Override
+                                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                     return false;
+                                 }
+
+                                 @Override
+                                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                     if (defaultIndex == position) {
+                                         imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                             @Override
+                                             public boolean onPreDraw() {
+                                                 imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                 supportStartPostponedEnterTransition();
+                                                 return false;
+                                             }
+                                         });
+                                     }
+                                     return false;
+                                 }
+                             }).into(imageGif);
+                 }
