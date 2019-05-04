@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,10 +28,14 @@ import com.bumptech.glide.request.target.Target;
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
 import com.wisn.medial.imagelist.FingerDragHelper;
+import com.wisn.medial.imagelist.glide.ImageUtils;
+import com.wisn.medial.imagelist.glide.LoadImageFile;
 import com.wisn.medial.imagelist.photoview.PhotoView;
+import com.wisn.medial.imagelist.subscale.ImageSource;
 import com.wisn.medial.imagelist.subscale.SubsamplingScaleImageView;
 import com.wisn.medial.src.Constants;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,19 +64,19 @@ public class FullScreenImageActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 //下面这句表示在intent中拿到bitmap对应的数组
-       byte[] res = getIntent().getByteArrayExtra("bitmap");
-        bitmap = getPicFromBytes(res,null);
+        byte[] res = getIntent().getByteArrayExtra("bitmap");
+        bitmap = getPicFromBytes(res, null);
 //        oneImage();
         vpImage();
 
 
-
     }
+
     //下面的这个方法是将byte数组转化为Bitmap对象的一个方法
     public static Bitmap getPicFromBytes(byte[] bytes, BitmapFactory.Options opts) {
         if (bytes != null)
             if (opts != null)
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,  opts);
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
             else
                 return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         return null;
@@ -103,7 +108,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
                 final FingerDragHelper fingerDragHelper = convertView.findViewById(R.id.fingerDragHelper);
                 final SubsamplingScaleImageView scaleView = convertView.findViewById(R.id.photo_view);
                 final PhotoView imageGif = convertView.findViewById(R.id.gif_view);
-                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+//                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
                 scaleView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
                 scaleView.setDoubleTapZoomDuration(200);
                 scaleView.setMinScale(1f);
@@ -114,51 +119,164 @@ public class FullScreenImageActivity extends AppCompatActivity {
                 imageGif.setMinimumScale(0.7f);
                 imageGif.setMaximumScale(5f);
                 imageGif.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageGif.setVisibility(View.VISIBLE);
-                scaleView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
+
+//                Glide.with(FullScreenImageActivity.this).downloadOnly().
                 container.addView(convertView);
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    mTransitionNameToView.put(String.valueOf(position), imageGif);
 //                    imageGif.setTransitionName(String.valueOf(position));
 //                }
-                View put = mTransitionNameToView.put(String.valueOf(position), imageGif);
-                imageGif.setTransitionName(String.valueOf(position));
-                imageGif.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        defaultIndex = position;
-                        if (position <= lastPosition && position >= firstPosition) {
-                            finishAfterTransition();
+                File glideCacheFile = LoadImageFile.getGlideCacheFile(FullScreenImageActivity.this, Constants.res[position]);
+                if (glideCacheFile != null && glideCacheFile.exists()) {
+                    boolean gifImageWithMime = ImageUtils.isGifImageWithMime(glideCacheFile.getAbsolutePath());
+                    if (gifImageWithMime) {
+                        // gif
+                        imageGif.setVisibility(View.VISIBLE);
+                        scaleView.setVisibility(View.GONE);
+                        mTransitionNameToView.put(String.valueOf(position), imageGif);
+                        imageGif.setTransitionName(String.valueOf(position));
+                        imageGif.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                defaultIndex = position;
+                                if (position <= lastPosition && position >= firstPosition) {
+                                    finishAfterTransition();
+                                } else {
+                                    finish();
+                                }
+                            }
+                        });
+                        GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
+                                .onlyRetrieveFromCache(true)
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        if (defaultIndex == position) {
+                                            imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                                @Override
+                                                public boolean onPreDraw() {
+                                                    imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                    supportStartPostponedEnterTransition();
+                                                    return false;
+                                                }
+                                            });
+                                        }
+                                        return false;
+                                    }
+                                }).into(imageGif);
+                    } else {
+                        imageGif.setVisibility(View.GONE);
+                        scaleView.setVisibility(View.VISIBLE);
+                        mTransitionNameToView.put(String.valueOf(position), scaleView);
+                        scaleView.setTransitionName(String.valueOf(position));
+                        scaleView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                defaultIndex = position;
+//                                scaleView.setMinScale(1f);
+//                                scaleView.setMaxScale(1f);
+                                if (position <= lastPosition && position >= firstPosition) {
+                                    finishAfterTransition();
+                                } else {
+                                    finish();
+                                }
+                            }
+                        });
+                        boolean longImage = ImageUtils.isLongImage(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath());
+                        if (longImage) {
+                            //long
+                            scaleView.setDoubleTapZoomDuration(200);
+                            scaleView.setMinScale(0.2f);
+//                            scaleView.setMinScale(ImageUtils.getLongImageMinScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+                            scaleView.setMaxScale(ImageUtils.getLongImageMaxScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+                            scaleView.setDoubleTapZoomScale(ImageUtils.getLongImageMaxScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+                            scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_START);
                         } else {
-                            finish();
+                            boolean wideImage = ImageUtils.isWideImage(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath());
+                            boolean smallImage = ImageUtils.isSmallImage(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath());
+                            if (wideImage) {
+                                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+                                scaleView.setMinScale(0.2f);
+                                scaleView.setMaxScale(5f);
+//                                scaleView.setDoubleTapZoomScale(ImageUtils.getWideImageDoubleScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+
+                            } else if (smallImage) {
+                                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
+//                                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+//                                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_START);
+
+                                scaleView.setMinScale(ImageUtils.getSmallImageMinScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+                                scaleView.setMaxScale(ImageUtils.getSmallImageMaxScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+//                                scaleView.setDoubleTapZoomScale(ImageUtils.getSmallImageMaxScale(FullScreenImageActivity.this, glideCacheFile.getAbsolutePath()));
+                            } else {
+                                scaleView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+                                scaleView.setMinScale(1f);
+                                scaleView.setMaxScale(5f);
+                                scaleView.setDoubleTapZoomScale(3f);
+                            }
+                        }
+//                        scaleView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+                        ImageSource imageSource = ImageSource.uri(Uri.fromFile(glideCacheFile));
+//                        if (ImageUtils.isBmpImageWithMime(glideCacheFile.getAbsolutePath())) {
+//                            imageSource.tilingDisabled();
+//                        }
+                        scaleView.setImage(imageSource);
+                        if (defaultIndex == position) {
+                            scaleView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    scaleView.getViewTreeObserver().removeOnPreDrawListener(this);
+                                    supportStartPostponedEnterTransition();
+                                    return false;
+                                }
+                            });
                         }
                     }
-                });
-                GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
-                        .onlyRetrieveFromCache(true)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                return false;
+                } else {
+                    View put = mTransitionNameToView.put(String.valueOf(position), imageGif);
+                    imageGif.setTransitionName(String.valueOf(position));
+                    imageGif.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            defaultIndex = position;
+                            if (position <= lastPosition && position >= firstPosition) {
+                                finishAfterTransition();
+                            } else {
+                                finish();
                             }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                if (defaultIndex == position) {
-                                    imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                                        @Override
-                                        public boolean onPreDraw() {
-                                            imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
-                                            supportStartPostponedEnterTransition();
-                                            return false;
-                                        }
-                                    });
+                        }
+                    });
+                    GlideApp.with(FullScreenImageActivity.this).load(Constants.res[position])
+                            .onlyRetrieveFromCache(true)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    return false;
                                 }
-                                return false;
-                            }
-                        }).into(imageGif);
 
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    if (defaultIndex == position) {
+                                        imageGif.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                            @Override
+                                            public boolean onPreDraw() {
+                                                imageGif.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                supportStartPostponedEnterTransition();
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                    return false;
+                                }
+                            }).into(imageGif);
+
+                }
 
 
                 return convertView;
