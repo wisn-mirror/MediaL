@@ -9,8 +9,10 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.Scroller;
@@ -64,6 +66,7 @@ public class ImageSlideAcitivity extends Activity {
         imageViewlast.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         GlideApp.with(ImageSlideAcitivity.this).load(Constants.res[0]).into(imageViewlast);
         allImageView.add(imageViewlast);
+        int widthPixels = getScreenWidth();
         adapter = new PagerAdapter() {
 
             @Override
@@ -87,6 +90,30 @@ public class ImageSlideAcitivity extends Activity {
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
 //                return super.instantiateItem(container, position);
                 ImageView imageView = allImageView.get(position);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                if (getCount() == 1) {
+                    params.width = (int) widthPixels;
+                } else {
+                    if (position == 0) {
+                        //第一个 //若超过一个活动，单个item屏幕90%比例
+                        params.width = (int) (widthPixels / 10 * 8.8);
+//                        mMarginLeft = px_margin_dp;
+//                        mMarginRight = px_margin_dp_helf;
+
+                    } else if (position == getCount() - 1) {
+                        //最后一个
+                        params.width = (int) (widthPixels / 10 * 8.8);
+//                        mMarginLeft = px_margin_dp_helf;
+//                        mMarginRight = px_margin_dp;
+                    } else {
+                        //中间的
+                        params.width = (int) (widthPixels / 10 * 8);
+//                        mMarginLeft = px_margin_dp_helf;
+//                        mMarginRight = px_margin_dp_helf;
+
+                    }
+                }
+                imageView.setLayoutParams(params);
                 container.addView(imageView);
                 return imageView;
             }
@@ -125,6 +152,13 @@ public class ImageSlideAcitivity extends Activity {
         vp_scroll.setCurrentItem(1, false);
         handler.sendEmptyMessageDelayed(100,2000);
 
+    }
+
+    private int getScreenWidth() {
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();// 创建了一张白纸
+        windowManager.getDefaultDisplay().getMetrics(outMetrics);// 给白纸设置宽高
+        return outMetrics.widthPixels;
     }
     public void nextPage(){
         if(!vp_scroll.isTouch){

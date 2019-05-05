@@ -12,6 +12,7 @@ import com.wisn.medial.ad.ImageSlideAcitivity;
 import com.wisn.medial.ad.VideoViewActivity;
 import com.wisn.medial.download.DownloadListActivity;
 import com.wisn.medial.imagelist.ImageListActivity;
+import com.wisn.medial.tianmao.StickActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,//存储
                     Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
+        startActivity(new Intent(this, StickActivity.class));
+
     }
 
     public void onClick(View view) {
@@ -50,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bt_scale:
                 startActivity(new Intent(this, DownloadListActivity.class));
+                break;
+            case R.id.bt_demo:
+//                startActivity(new Intent(this, SlideDemo.class));
+                startActivity(new Intent(this, StickActivity.class));
                 break;
 
         }
