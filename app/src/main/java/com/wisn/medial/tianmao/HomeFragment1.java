@@ -4,11 +4,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +34,7 @@ import java.util.Random;
 /**
  * Created by Wisn on 2019-05-06 11:07.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment1 extends Fragment {
 
 
     /**
@@ -57,52 +57,104 @@ public class HomeFragment extends Fragment {
     private RecyclerView recycler_view;
     private String TAG = "StickActivity";
     private PagerAdapter adapter;
-    private AppBarLayout mAppbar;
     private View mToobarSmall;
     private View mToolbarSearch;
-    private View mVToolbarSearchMask;
-    private View mVToolbarSmallMask;
-    private View mVTitleBigMask;
     private int mMaskColor;     //三个模块的背景主题色
 
 
-
-    private HashMap<Integer,Integer> hashMap=new HashMap<>();
+    private HashMap<Integer, Integer> hashMap = new HashMap<>();
     private SwipeRefreshLayout swipeRefreshLayout;
+    private View botton_big;
+    private View v_title_big_mask;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_stickview, null);
+        View view = inflater.inflate(R.layout.fragment_stickview1, null);
         initView(view);
         return view;
     }
 
     private void initView(View view) {
         holderTabLayout = view.findViewById(R.id.tablayout_holder);
-        realTabLayout =view. findViewById(R.id.tablayout_real);
-        scrollView =view. findViewById(R.id.scrollView);
-        recycler_view =view. findViewById(R.id.recycler_view);
-        mAppbar = view.findViewById(R.id.appbar);
+        realTabLayout = view.findViewById(R.id.tablayout_real);
+        scrollView = view.findViewById(R.id.scrollView);
+        botton_big = view.findViewById(R.id.botton_big);
+        recycler_view = view.findViewById(R.id.recycler_view);
+        v_title_big_mask = view.findViewById(R.id.v_title_big_mask);
         viewpage = view.findViewById(R.id.viewpage);
-        mVToolbarSmallMask = view.findViewById(R.id.v_toolbar_small_mask);
 
         mToobarSmall = view.findViewById(R.id.toolbar_small);
         mToolbarSearch = view.findViewById(R.id.toolbar_search);
-        mVToolbarSearchMask = view.findViewById(R.id.v_toolbar_search_mask);
-        mVTitleBigMask = view.findViewById(R.id.v_title_big_mask);
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
         mMaskColor = getResources().getColor(R.color.mainColor);
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new  ViewTreeObserver.OnScrollChangedListener() {
+        float i1 = dip2px(103);
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
                 // 这只一定是 == ,不能是 <= ,scrollView 会自己调整
-                swipeRefreshLayout.setEnabled(scrollView.getScrollY()==0);
+                swipeRefreshLayout.setEnabled(scrollView.getScrollY() == 0);
             }
         });
-        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                float sc = (float) scrollY / i1;
+
+                Log.e(TAG, "onScrollChange: " + i1 + "---" + scrollY + "----" + sc + "----" + oldScrollY);
+                int alpha = (int) sc * 255;
+                Log.i("NewHomeFragment", "alpha =" + alpha);
+                int argb = Color.argb(alpha, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
+                int argbDouble = Color.argb((alpha * 2) > 255 ? 255 : alpha * 2, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
+                //appBarLayout上滑一半距离后小图标应该由渐变到全透明
+                int title_small_argb = Color.argb(255 - alpha, Color.red(mMaskColor),
+                        Color.green(mMaskColor), Color.blue(mMaskColor));
+                if (sc > 0.2 && sc < 0.8) {
+                    mToolbarSearch.setVisibility(View.VISIBLE);
+                    mToobarSmall.setVisibility(View.VISIBLE);
+                }
+                if (sc <= 0.5) {
+                    mToobarSmall.setVisibility(View.GONE);
+                }
+                if (sc > 0.5) {
+                    mToolbarSearch.setVisibility(View.GONE);
+                }
+                mToolbarSearch.setAlpha(1f-sc);
+                mToobarSmall.setAlpha(sc+0.2f);
+//                botton_big.setAlpha(sc);
+                v_title_big_mask.setBackgroundColor(argb);
+
+                //监听滚动状态
+
+                if (scrollY > oldScrollY) {//向下滚动
+                    Log.i(TAG, "Scroll DOWN");
+                }
+                if (scrollY < oldScrollY) {//向上滚动
+                    Log.i(TAG, "Scroll UP");
+                }
+
+                if (scrollY == 0) {// 滚动到顶
+                    Log.i(TAG, "TOP SCROLL");
+                }
+                // 滚动到底
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    Log.i(TAG, "BOTTOM SCROLL");
+                }
+/* //判断某个控件是否可见
+                Rect scrollBounds = new Rect();
+                svscrollouter.getHitRect(scrollBounds);
+                if (tvscrollthree.getLocalVisibleRect(scrollBounds)) {//可见
+                    Log.e(TAG, "onScrollChange:  第3个可见" );
+                }else {//完全不可见
+                    Log.e(TAG, "onScrollChange:  第3个不可见" );
+                }*/
+
+            }
+        });
+      /*  mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 Log.i("NewHomeFragment", "verticalOffset =" + verticalOffset);
@@ -136,7 +188,7 @@ public class HomeFragment extends Fragment {
                 //上滑时遮罩由全透明到半透明
                 mVTitleBigMask.setBackgroundColor(argb);
             }
-        });
+        });*/
         for (int i = 0; i < tabTxt.length; i++) {
             holderTabLayout.addTab(holderTabLayout.newTab().setText(tabTxt[i]));
             realTabLayout.addTab(realTabLayout.newTab().setText(tabTxt[i]));
@@ -149,7 +201,7 @@ public class HomeFragment extends Fragment {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                },2000);
+                }, 2000);
             }
         });
 
@@ -250,7 +302,7 @@ public class HomeFragment extends Fragment {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                if(i==1){
+                if (i == 1) {
                     RecyclerView recyclerView = new RecyclerView(getContext());
                     int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
                     recyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -261,10 +313,10 @@ public class HomeFragment extends Fragment {
                         @NonNull
                         @Override
                         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                            LinearLayout linearLayout=new LinearLayout(getContext());
+                            LinearLayout linearLayout = new LinearLayout(getContext());
                             linearLayout.setOrientation(LinearLayout.VERTICAL);
                             linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            TextView textView=new TextView(getContext());
+                            TextView textView = new TextView(getContext());
                             ImageView imageView = new ImageView(getContext());
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             linearLayout.addView(imageView);
@@ -289,8 +341,8 @@ public class HomeFragment extends Fragment {
                         }
                     });
                     return new ViewHoderM(recyclerView);
-                }else{
-                    ScrollView scrollView=new ScrollView(getContext());
+                } else {
+                    ScrollView scrollView = new ScrollView(getContext());
                     TextView textView = new TextView(getContext());
                     textView.setText("内容 各种条目实现：" + i);
                     textView.append("内容 各种条目实现：" + i);
@@ -303,9 +355,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public int getItemViewType(int position) {
-                if(position%2==1){
+                if (position % 2 == 1) {
                     return 1;
-                }else{
+                } else {
                     return 0;
                 }
             }
@@ -338,7 +390,7 @@ public class HomeFragment extends Fragment {
                 //当y < holderTabLayout.getTop()时，holderTabLayout 仍在屏幕内，realTabLayout不断移动holderTabLayout.getTop()距离，覆盖holderTabLayout
                 //当y > holderTabLayout.getTop()时，holderTabLayout 移出，realTabLayout不断移动y，相对的停留在顶部，看上去是静止的
                 int translation = Math.max(y, holderTabLayout.getTop());
-                Log.d(TAG, "y:" + y+ "  oldy："+oldy);
+                Log.d(TAG, "y:" + y + "  oldy：" + oldy);
 //                Log.d(TAG, "translation:" + translation+ "  "+viewpage.getTop());
                 realTabLayout.setTranslationY(translation);
                 realTabLayout.setVisibility(View.VISIBLE);
@@ -370,9 +422,9 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        
+
     }
-    
+
 
     private void setScrollPos(int newPos) {
         if (lastPos != newPos) {
@@ -386,5 +438,13 @@ public class HomeFragment extends Fragment {
         public ViewHoderM(@NonNull View itemView) {
             super(itemView);
         }
+    }
+
+    /**
+     * 根据手机的分辨率从 dip 的单位 转成为 px(像素)
+     */
+    public float dip2px(float dpValue) {
+        final float scale = this.getResources().getDisplayMetrics().density;
+        return (dpValue * scale + 0.5f);
     }
 }

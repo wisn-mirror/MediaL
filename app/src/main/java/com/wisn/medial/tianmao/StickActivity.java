@@ -12,14 +12,14 @@ import com.wisn.medial.R;
  */
 public class StickActivity extends AppCompatActivity {
     private FrameLayout fl_content;
-    private HomeFragment imageListFragment;
+    private HomeFragment1 imageListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_list);
         fl_content = findViewById(R.id.fl_content);
-        imageListFragment = new HomeFragment();
+        imageListFragment = new HomeFragment1();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fl_content, imageListFragment).commitAllowingStateLoss();
 
