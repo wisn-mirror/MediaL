@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_title_root"
+    android:layout_width="match_parent"
+    android:layout_height="103dp"
+    android:background="@drawable/lib_shape_gradual_main_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="103dp"
+        android:orientation="horizontal"
+        android:paddingBottom="18dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="26dp"
+        android:paddingTop="8dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="77dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/title_iv_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="57dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/home_icon_scan_code_big" />
+
+            <TextView
+                android:id="@+id/title_tv_scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_iv_scan"
+                android:layout_marginTop="2dp"
+                android:gravity="center_horizontal"
+                android:text="@string/home_scan"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="77dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/title_iv_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="57dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/home_icon_pay_code_big" />
+
+            <TextView
+                android:id="@+id/title_tv_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_iv_pay"
+                android:layout_marginTop="2dp"
+                android:gravity="center_horizontal"
+                android:text="@string/home_member_code"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="77dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/title_iv_take"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="57dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/home_icon_take_out" />
+
+            <TextView
+                android:id="@+id/title_tv_take"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_iv_take"
+                android:layout_marginTop="2dp"
+                android:gravity="center_horizontal"
+                android:text="@string/home_take_out"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_title_big_mask"
+        android:layout_width="match_parent"
+        android:layout_height="103dp" />
+
+</FrameLayout>

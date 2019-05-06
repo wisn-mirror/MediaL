@@ -1,56 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wisn.medial.tianmao.CustomScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scrollView"
+    android:id="@+id/rl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:fillViewport="true">
+    android:orientation="vertical">
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/mainfragment_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/lib_shape_gradual_main_bg">
+
+        <include
+            android:id="@+id/toolbar_small"
+            layout="@layout/home_include_toolbar_small"/>
+
+        <include
+            android:id="@+id/toolbar_search"
+            layout="@layout/home_include_toolbar_search"/>
+    </RelativeLayout>
+
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_below="@+id/mainfragment_root_view">
 
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <include layout="@layout/home_include_title_big"/>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+<!--
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!--占位的tablayout-->
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tablayout_holder"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#ffffff"
-                app:tabIndicatorColor="@color/colorPrimary"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/colorPrimary" />
-
-
-            <com.wisn.medial.tianmao.ScrollViewViewPager
-                android:id="@+id/viewpage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-
-        <!--实际用户操作的tablayout-->
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tablayout_real"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/SwipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#ffffff"
-            android:visibility="invisible"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/colorPrimary" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
-</com.wisn.medial.tianmao.CustomScrollView>
+            >
+            <com.wisn.medial.tianmao.CustomScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:visibility="visible"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                >
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <com.wisn.medial.tianmao.NestedRecyclerView
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            />
+                        <!--占位的tablayout-->
+                        <android.support.design.widget.TabLayout
+                            android:id="@+id/tablayout_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="#ffffff"
+                            app:tabIndicatorColor="@color/colorPrimary"
+                            app:tabMode="scrollable"
+                            app:tabSelectedTextColor="@color/colorPrimary" />
+
+
+                        <com.wisn.medial.tianmao.ScrollViewViewPager
+                            android:id="@+id/viewpage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                    <!--实际用户操作的tablayout-->
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/tablayout_real"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="#ffffff"
+                        android:visibility="invisible"
+                        app:tabIndicatorColor="@color/colorPrimary"
+                        app:tabMode="scrollable"
+                        app:tabSelectedTextColor="@color/colorPrimary" />
+                </FrameLayout>
+            </com.wisn.medial.tianmao.CustomScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+       <!-- </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+
+    </android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -1,15 +1,15 @@
 package com.wisn.medial.tianmao;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
-import android.widget.ScrollView;
 
 /**
  * Created by Wisn on 2019-05-05 13:51.
  */
-public class CustomScrollView extends ScrollView {
+public class CustomScrollView extends NestedScrollView {
 
     private int slop;
     private int touch;
@@ -33,11 +33,11 @@ public class CustomScrollView extends ScrollView {
 
     }
 
-    public CustomScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+  /*  public CustomScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setSlop(context);
 
-    }
+    }*/
 
     public void setCallbacks(Callbacks callbacks) {
         this.mCallbacks = callbacks;
@@ -69,10 +69,10 @@ public class CustomScrollView extends ScrollView {
                 //  保存当前touch的纵坐标值
                 touch = (int) ev.getRawY();
                 break;
-            case MotionEvent.ACTION_MOVE:
+           /* case MotionEvent.ACTION_MOVE:
                 //  滑动距离大于slop值时，返回true
-                if (Math.abs((int) ev.getRawY() - touch) > slop) return true;
-                break;
+                if (Math.abs((int) ev.getRawY() - touch) > slop) return false;
+                break;*/
         }
 
         return super.onInterceptTouchEvent(ev);
@@ -83,7 +83,7 @@ public class CustomScrollView extends ScrollView {
      * @param context ScrollView对应的context
      */
     private void setSlop(Context context) {
-        slop = ViewConfiguration.get(context).getScaledTouchSlop();
+        slop = ViewConfiguration.get(context).getScaledTouchSlop()*2;
     }
 
 }
