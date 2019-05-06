@@ -33,11 +33,6 @@ public class CustomScrollView extends NestedScrollView {
 
     }
 
-  /*  public CustomScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setSlop(context);
-
-    }*/
 
     public void setCallbacks(Callbacks callbacks) {
         this.mCallbacks = callbacks;
@@ -64,16 +59,16 @@ public class CustomScrollView extends NestedScrollView {
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
+       /* switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //  保存当前touch的纵坐标值
                 touch = (int) ev.getRawY();
                 break;
-           /* case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE:
                 //  滑动距离大于slop值时，返回true
                 if (Math.abs((int) ev.getRawY() - touch) > slop) return false;
-                break;*/
-        }
+                break;
+        }*/
 
         return super.onInterceptTouchEvent(ev);
     }
