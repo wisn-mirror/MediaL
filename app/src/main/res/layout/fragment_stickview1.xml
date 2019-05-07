@@ -6,27 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/mainfragment_root_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/lib_shape_gradual_main_bg">
-
-        <include
-            android:id="@+id/toolbar_small"
-            layout="@layout/home_include_toolbar_small" />
-
-        <include
-            android:id="@+id/toolbar_search"
-            layout="@layout/home_include_toolbar_search" />
-    </RelativeLayout>
-
 
     <com.wisn.medial.tianmao.MSwipeRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/mainfragment_root_view">
+        android:layout_height="match_parent">
 
         <com.wisn.medial.tianmao.CustomScrollView
             android:id="@+id/scrollView"
@@ -40,13 +24,19 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <!--
-                android:descendantFocusability="blocksDescendants"-->
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants">
+
+                <ImageView
+                    android:id="@+id/mark"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="@color/mainColor"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="50dp"
                     android:orientation="vertical">
 
                     <include
@@ -84,6 +74,8 @@
                     android:id="@+id/tablayout_real"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginTop="50dp"
+
                     android:background="#ffffff"
                     android:visibility="invisible"
                     app:tabIndicatorColor="@color/colorPrimary"
@@ -94,5 +86,19 @@
 
     </com.wisn.medial.tianmao.MSwipeRefreshLayout>
 
+    <RelativeLayout
+        android:id="@+id/mainfragment_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/lib_shape_gradual_main_bg">
+
+        <include
+            android:id="@+id/toolbar_small"
+            layout="@layout/home_include_toolbar_small" />
+
+        <include
+            android:id="@+id/toolbar_search"
+            layout="@layout/home_include_toolbar_search" />
+    </RelativeLayout>
     <!-- </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
 </RelativeLayout>

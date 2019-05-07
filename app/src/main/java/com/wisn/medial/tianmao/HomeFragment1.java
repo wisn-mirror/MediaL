@@ -27,9 +27,17 @@ import android.widget.TextView;
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
 import com.wisn.medial.src.Constants;
+import com.wisn.medial.tianmao.banner2.Banner;
+import com.wisn.medial.tianmao.banner2.BannerConfig;
+import com.wisn.medial.tianmao.banner2.CustomData;
+import com.wisn.medial.tianmao.banner2.CustomViewHolder2;
+import com.wisn.medial.tianmao.banner2.Transformer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+
 
 /**
  * Created by Wisn on 2019-05-06 11:07.
@@ -66,18 +74,19 @@ public class HomeFragment1 extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private View botton_big;
     private View v_title_big_mask;
+    private View mark;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_stickview1, null);
         initView(view);
         return view;
     }
 
     private void initView(View view) {
+        mark = view.findViewById(R.id.mark);
         holderTabLayout = view.findViewById(R.id.tablayout_holder);
         realTabLayout = view.findViewById(R.id.tablayout_real);
         scrollView = view.findViewById(R.id.scrollView);
@@ -117,14 +126,16 @@ public class HomeFragment1 extends Fragment {
                     mToobarSmall.setVisibility(View.VISIBLE);
                 }
                 if (sc <= 0.5) {
+                    mToolbarSearch.setVisibility(View.VISIBLE);
                     mToobarSmall.setVisibility(View.GONE);
+
                 }
                 if (sc > 0.5) {
                     mToolbarSearch.setVisibility(View.GONE);
+                    mToobarSmall.setVisibility(View.VISIBLE);
                 }
-                mToolbarSearch.setAlpha(1f-sc);
-                mToobarSmall.setAlpha(sc+0.2f);
-//                botton_big.setAlpha(sc);
+                mToolbarSearch.setAlpha(1f - sc);
+                mToobarSmall.setAlpha(sc + 0.2f);
                 v_title_big_mask.setBackgroundColor(argb);
 
                 //监听滚动状态
@@ -143,52 +154,9 @@ public class HomeFragment1 extends Fragment {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     Log.i(TAG, "BOTTOM SCROLL");
                 }
-/* //判断某个控件是否可见
-                Rect scrollBounds = new Rect();
-                svscrollouter.getHitRect(scrollBounds);
-                if (tvscrollthree.getLocalVisibleRect(scrollBounds)) {//可见
-                    Log.e(TAG, "onScrollChange:  第3个可见" );
-                }else {//完全不可见
-                    Log.e(TAG, "onScrollChange:  第3个不可见" );
-                }*/
 
             }
         });
-      /*  mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                Log.i("NewHomeFragment", "verticalOffset =" + verticalOffset);
-//                mRefreshLayout.setEnableRefresh(verticalOffset >= 0);
-                if (verticalOffset >= 0) {
-                    swipeRefreshLayout.setEnabled(true);
-                } else {
-                    swipeRefreshLayout.setEnabled(false);
-                }
-                float progress = Math.abs(verticalOffset);
-                float height = appBarLayout.getTotalScrollRange();//AppBarLayout总的距离px
-                int alpha = (int) ((progress / height) * 255);
-                Log.i("NewHomeFragment", "alpha =" + alpha);
-                Log.i("NewHomeFragment", "height =" + height);
-                int argb = Color.argb(alpha, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
-                int argbDouble = Color.argb((alpha * 2) > 255 ? 255 : alpha * 2, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
-                //appBarLayout上滑一半距离后小图标应该由渐变到全透明
-                int title_small_argb = Color.argb(255 - alpha, Color.red(mMaskColor),
-                        Color.green(mMaskColor), Color.blue(mMaskColor));
-                if (progress <= height / 2) {
-                    mToolbarSearch.setVisibility(View.VISIBLE);
-                    mToobarSmall.setVisibility(View.INVISIBLE);
-                    //为了和下面的大图标渐变区分,乘以2倍渐变
-                    mVToolbarSearchMask.setBackgroundColor(argbDouble);
-                } else {
-                    mToolbarSearch.setVisibility(View.INVISIBLE);
-                    mToobarSmall.setVisibility(View.VISIBLE);
-                    //appBarLayout上滑1/2距离后小图标应该由渐变到全透明
-                    mVToolbarSmallMask.setBackgroundColor(title_small_argb);
-                }
-                //上滑时遮罩由全透明到半透明
-                mVTitleBigMask.setBackgroundColor(argb);
-            }
-        });*/
         for (int i = 0; i < tabTxt.length; i++) {
             holderTabLayout.addTab(holderTabLayout.newTab().setText(tabTxt[i]));
             realTabLayout.addTab(realTabLayout.newTab().setText(tabTxt[i]));
@@ -210,7 +178,6 @@ public class HomeFragment1 extends Fragment {
             public void onGlobalLayout() {
                 realTabLayout.setVisibility(View.INVISIBLE);
                 viewpage.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
-
             }
         };
         viewpage.getViewTreeObserver().addOnGlobalLayoutListener(listener);
@@ -298,13 +265,83 @@ public class HomeFragment1 extends Fragment {
             }
         });
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
+        List<CustomData> list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            list.add(new CustomData(Constants.res[i],String.valueOf(i),true));
+        }
         recycler_view.setAdapter(new RecyclerView.Adapter() {
+            private int lastPosition = 0;
+            private List<ImageView> indicatorImages = new ArrayList<>();
+
+            private int mIndicatorSelectedResId = R.drawable.indicator;
+            private int mIndicatorUnselectedResId = R.drawable.indicator2;
+
+            private void initIndicator( LinearLayout indicator) {
+                for (int i = 0; i < list.size(); i++) {
+                    ImageView imageView = new ImageView(getContext());
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    LinearLayout.LayoutParams custom_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    custom_params.leftMargin = 2;
+                    custom_params.rightMargin = 2;
+                    if (i == 0) {
+                        imageView.setImageResource(mIndicatorSelectedResId);
+                    } else {
+                        imageView.setImageResource(mIndicatorUnselectedResId);
+                    }
+                    indicatorImages.add(imageView);
+                    indicator.addView(imageView, custom_params);
+                }
+            }
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                if (i == 1) {
+                if (i == 2) {
+                   /* BannerLayout recyclerView = new BannerLayout(getContext());
+                    recyclerView.setAutoPlaying(true);
+                    recyclerView.setAutoPlayDuration(2000);
+                    recyclerView.setCenterScale(1.03f);
+                    recyclerView.setItemSpace(8);
+                    recyclerView.setMoveSpeed(1.2f);
+                    WebBannerAdapter webBannerAdapter = new WebBannerAdapter(getContext(), list);
+                    webBannerAdapter.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Toast.makeText(getContext(), "点击了第  " + position + "  项", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    recyclerView.setAdapter(webBannerAdapter);*/
+                    LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_recycle, null);
+                    Banner banner1= linearLayout.findViewById(R.id.banner1);
+                    LinearLayout indicator= linearLayout.findViewById(R.id.indicator);
+                    banner1.setAutoPlay(false)
+                            .setDelayTime(1700)
+                            .setPages(list, new CustomViewHolder2())
+                            .setBannerStyle(BannerConfig.NOT_INDICATOR)
+                            .setBannerAnimation(Transformer.Scale)
+                            .start();
+                    initIndicator(indicator);
+                    banner1.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                        }
+
+                        @Override
+                        public void onPageSelected(int position) {
+                            indicatorImages.get((lastPosition + list.size()) % list.size()).setImageResource(mIndicatorUnselectedResId);
+                            indicatorImages.get((position + list.size()) % list.size()).setImageResource(mIndicatorSelectedResId);
+                            lastPosition = position;
+                        }
+
+                        @Override
+                        public void onPageScrollStateChanged(int state) {
+
+                        }
+                    });
+                    return new ViewHoderM(linearLayout);
+                } else if (i == 1) {
                     RecyclerView recyclerView = new RecyclerView(getContext());
-                    int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
                     recyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     LinearLayoutManager llm = new LinearLayoutManager(getContext());
                     llm.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -355,7 +392,9 @@ public class HomeFragment1 extends Fragment {
 
             @Override
             public int getItemViewType(int position) {
-                if (position % 2 == 1) {
+                if (position == 0) {
+                    return 2;
+                } else if (position % 2 == 1) {
                     return 1;
                 } else {
                     return 0;
@@ -406,9 +445,6 @@ public class HomeFragment1 extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 isScroll = false;
                 int pos = tab.getPosition();
-//                int top = anchorList.get(pos).getTop();
-                //同样这里滑动要加上顶部内容区域的高度(这里写死的高度)
-//                scrollView.smoothScrollTo(0, top + 200 * 3);
                 viewpage.setCurrentItem(pos);
             }
 

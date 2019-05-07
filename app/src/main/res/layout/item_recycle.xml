@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="165dp"
+    android:orientation="vertical">
+
+    <com.wisn.medial.tianmao.banner2.Banner
+        android:id="@+id/banner1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:page_left_margin="20dp"
+        app:page_right_margin="20dp" />
+
+    <LinearLayout
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:gravity="center"
+        android:orientation="horizontal" />
+
+</LinearLayout>
