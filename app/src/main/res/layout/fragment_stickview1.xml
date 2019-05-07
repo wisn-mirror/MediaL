@@ -6,11 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/marktop"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
 
     <com.wisn.medial.tianmao.MSwipeRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp">
 
         <com.wisn.medial.tianmao.CustomScrollView
             android:id="@+id/scrollView"
@@ -30,13 +35,11 @@
                 <ImageView
                     android:id="@+id/mark"
                     android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:background="@color/mainColor"/>
+                    android:layout_height="220dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="50dp"
                     android:orientation="vertical">
 
                     <include
@@ -74,8 +77,6 @@
                     android:id="@+id/tablayout_real"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="50dp"
-
                     android:background="#ffffff"
                     android:visibility="invisible"
                     app:tabIndicatorColor="@color/colorPrimary"
@@ -90,7 +91,8 @@
         android:id="@+id/mainfragment_root_view"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/lib_shape_gradual_main_bg">
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent">
 
         <include
             android:id="@+id/toolbar_small"

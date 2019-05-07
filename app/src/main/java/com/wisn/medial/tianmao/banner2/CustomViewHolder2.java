@@ -1,9 +1,6 @@
 package com.wisn.medial.tianmao.banner2;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,9 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
 import com.wisn.medial.src.Constants;
 
@@ -44,7 +38,7 @@ public class CustomViewHolder2 implements BannerViewHolder<CustomData> {
             }
         });
 //        Glide.with(context).load(Constants.res[position]) .onlyRetrieveFromCache(true).into(image);
-         GlideApp.with(context).load(Constants.res[position]).dontAnimate().into(image);
+         Glide.with(context).load(Constants.res[position]).dontAnimate().into(image);
     /*    Glide.with(context).load(Constants.res[position]).into(new SimpleTarget() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition transition) {
@@ -57,12 +51,12 @@ public class CustomViewHolder2 implements BannerViewHolder<CustomData> {
             }
 *//*
         });*/
-        Glide.with(context).load(Constants.res[position]).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                image.setImageDrawable(resource);
-            }
-        });
+//        Glide.with(context).load(Constants.res[position]).into(new SimpleTarget<Drawable>() {
+//            @Override
+//            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+//                image.setImageDrawable(resource);
+//            }
+//        });
 
     }
 }

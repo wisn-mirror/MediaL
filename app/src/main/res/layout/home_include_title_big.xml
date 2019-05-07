@@ -3,7 +3,7 @@
     android:id="@+id/fl_title_root"
     android:layout_width="match_parent"
     android:layout_height="103dp"
-    android:background="@drawable/lib_shape_gradual_main_bg">
+    android:background="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"

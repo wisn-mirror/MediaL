@@ -1,51 +1,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/lib_shape_gradual_main_bg">
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/transparent">
 
     <ImageView
         android:id="@+id/iv_scan"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/home_icon_scan_code_big"/>
+        android:visibility="gone"
+        android:src="@drawable/home_icon_scan_code_big" />
 
     <ImageView
         android:id="@+id/iv_pay"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_toRightOf="@+id/iv_scan"
-        android:src="@drawable/home_icon_pay_code_big"/>
+        android:src="@drawable/home_icon_pay_code_big" />
 
     <ImageView
         android:id="@+id/iv_shop"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_toRightOf="@+id/iv_pay"
-        android:src="@drawable/home_icon_take_out"/>
+        android:src="@drawable/home_icon_take_out" />
 
     <ImageView
         android:id="@+id/iv_search"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_toRightOf="@+id/iv_shop"
-        android:src="@drawable/home_icon_search"/>
+        android:src="@drawable/home_icon_search" />
 
     <ImageView
         android:id="@+id/iv_red_package"
         android:layout_width="40dp"
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:src="@drawable/home_icon_add_friend"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <View
         android:id="@+id/v_toolbar_small_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"/>
+        android:background="#00000000" />
 
 </RelativeLayout>

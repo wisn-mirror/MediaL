@@ -9,8 +9,8 @@
         android:id="@+id/banner1"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        app:page_left_margin="20dp"
-        app:page_right_margin="20dp" />
+        app:page_left_margin="30dp"
+        app:page_right_margin="30dp" />
 
     <LinearLayout
         android:id="@+id/indicator"

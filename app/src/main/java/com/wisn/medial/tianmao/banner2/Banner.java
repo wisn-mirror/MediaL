@@ -235,6 +235,16 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         return this;
     }
 
+    public Banner setPageLeftMargin(int mPageLeftMargin) {
+        this.mPageLeftMargin = mPageLeftMargin;
+        return this;
+    }
+
+    public Banner setPageRightMargin(int mPageRightMargin) {
+        this.mPageRightMargin = mPageRightMargin;
+        return this;
+    }
+
     public Banner setCurrentPage(@IntRange(from = 0) int page) {
         if (count == 0)
             return this;

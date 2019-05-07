@@ -1,5 +1,6 @@
 package com.wisn.medial.tianmao;
 
+import android.animation.ArgbEvaluator;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -43,8 +45,6 @@ import java.util.Random;
  * Created by Wisn on 2019-05-06 11:07.
  */
 public class HomeFragment1 extends Fragment {
-
-
     /**
      * 占位tablayout，用于滑动过程中去确定实际的tablayout的位置
      */
@@ -55,7 +55,6 @@ public class HomeFragment1 extends Fragment {
     private TabLayout realTabLayout;
     private CustomScrollView scrollView;
     private String[] tabTxt = {"推荐", "坚果", "肉类", "果铺", "糕点", "饼干"};
-
     private boolean isScroll;
     //记录上一次位置，防止在同一内容块里滑动 重复定位到tablayout
     private int lastPos = 0;
@@ -68,25 +67,32 @@ public class HomeFragment1 extends Fragment {
     private View mToobarSmall;
     private View mToolbarSearch;
     private int mMaskColor;     //三个模块的背景主题色
-
-
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
     private SwipeRefreshLayout swipeRefreshLayout;
     private View botton_big;
     private View v_title_big_mask;
     private View mark;
-
-
+    private ArgbEvaluator mMArgbEvaluator;
+    private View marktop;
+    private int colorBg[] =new int[4];
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         View view = inflater.inflate(R.layout.fragment_stickview1, null);
+       colorBg[0] =getResources().getColor(R.color.colorPrimary);
+       colorBg[1] =getResources().getColor(R.color.colorPrimaryDark);
+        colorBg[2] =getResources().getColor(R.color.colorAccent);
+        colorBg[3] =getResources().getColor(R.color.mainColor);
+
         initView(view);
         return view;
     }
 
     private void initView(View view) {
         mark = view.findViewById(R.id.mark);
+        marktop = view.findViewById(R.id.marktop);
         holderTabLayout = view.findViewById(R.id.tablayout_holder);
         realTabLayout = view.findViewById(R.id.tablayout_real);
         scrollView = view.findViewById(R.id.scrollView);
@@ -99,6 +105,8 @@ public class HomeFragment1 extends Fragment {
         mToolbarSearch = view.findViewById(R.id.toolbar_search);
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
         mMaskColor = getResources().getColor(R.color.mainColor);
+        mToolbarSearch.setVisibility(View.VISIBLE);
+        mToobarSmall.setVisibility(View.GONE);
         float i1 = dip2px(103);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
@@ -128,7 +136,6 @@ public class HomeFragment1 extends Fragment {
                 if (sc <= 0.5) {
                     mToolbarSearch.setVisibility(View.VISIBLE);
                     mToobarSmall.setVisibility(View.GONE);
-
                 }
                 if (sc > 0.5) {
                     mToolbarSearch.setVisibility(View.GONE);
@@ -182,6 +189,8 @@ public class HomeFragment1 extends Fragment {
         };
         viewpage.getViewTreeObserver().addOnGlobalLayoutListener(listener);
         viewpage.setFocusable(false);
+        mMArgbEvaluator = new ArgbEvaluator();
+
         adapter = new PagerAdapter() {
             @Override
             public int getCount() {
@@ -266,7 +275,7 @@ public class HomeFragment1 extends Fragment {
         });
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         List<CustomData> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < colorBg.length; i++) {
             list.add(new CustomData(Constants.res[i],String.valueOf(i),true));
         }
         recycler_view.setAdapter(new RecyclerView.Adapter() {
@@ -297,33 +306,27 @@ public class HomeFragment1 extends Fragment {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 if (i == 2) {
-                   /* BannerLayout recyclerView = new BannerLayout(getContext());
-                    recyclerView.setAutoPlaying(true);
-                    recyclerView.setAutoPlayDuration(2000);
-                    recyclerView.setCenterScale(1.03f);
-                    recyclerView.setItemSpace(8);
-                    recyclerView.setMoveSpeed(1.2f);
-                    WebBannerAdapter webBannerAdapter = new WebBannerAdapter(getContext(), list);
-                    webBannerAdapter.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
-                        @Override
-                        public void onItemClick(int position) {
-                            Toast.makeText(getContext(), "点击了第  " + position + "  项", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    recyclerView.setAdapter(webBannerAdapter);*/
                     LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_recycle, null);
                     Banner banner1= linearLayout.findViewById(R.id.banner1);
                     LinearLayout indicator= linearLayout.findViewById(R.id.indicator);
-                    banner1.setAutoPlay(false)
-                            .setDelayTime(1700)
+                    banner1.setAutoPlay(true)
+                            .setDelayTime(2700)
                             .setPages(list, new CustomViewHolder2())
                             .setBannerStyle(BannerConfig.NOT_INDICATOR)
                             .setBannerAnimation(Transformer.Scale)
+//                            .setPageLeftMargin((int) dip2px(30))
+//                            .setPageRightMargin((int) dip2px(30))
                             .start();
                     initIndicator(indicator);
                     banner1.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                         @Override
                         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                            int color = (int) mMArgbEvaluator.evaluate(positionOffset, colorBg[position % colorBg.length],
+                                    colorBg[(position + 1) % colorBg.length]);
+                            Log.d("onPageScrolled","position:"+position+ " positionOffset:"+positionOffset+" color："+color);
+
+                            mark.setBackgroundColor(color);
+                            marktop.setBackgroundColor(color);
 
                         }
 
