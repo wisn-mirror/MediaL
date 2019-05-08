@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
 import com.wisn.medial.src.Constants;
@@ -108,6 +109,7 @@ public class HomeFragment1 extends Fragment {
         header = view.findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.trans));
         header.setmView(mark);
+        mark.setConfig(DensityUtil.dp2px(260),DensityUtil.dp2px(20));
         mToobarSmall = view.findViewById(R.id.toolbar_small);
         mToolbarSearch = view.findViewById(R.id.toolbar_search);
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
@@ -120,7 +122,7 @@ public class HomeFragment1 extends Fragment {
             public void onScrollChanged() {
                 // 这只一定是 == ,不能是 <= ,scrollView 会自己调整
                 swipeRefreshLayout.setEnabled(scrollView.getScrollY() == 0);
-                mark.getLayoutParams();
+
             }
         });
 
@@ -128,8 +130,11 @@ public class HomeFragment1 extends Fragment {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 float sc = (float) scrollY / i1;
-
-                Log.e(TAG, "onScrollChange: " + i1 + "---" + scrollY + "----" + sc + "----" + oldScrollY);
+//                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mark.getLayoutParams();
+//                layoutParams.topMargin=-scrollY;
+//                mark.set
+                mark.setTranslationY(-scrollY);
+                Log.e(TAG, "onScrollChange: " + i1 + "scrollY:" + scrollY + "----" + sc + " oldScrollY:" + oldScrollY+"  v.getScaleY:" +v.getScaleY());
                 int alpha = (int) sc * 255;
                 Log.i("NewHomeFragment", "alpha =" + alpha);
                 int argb = Color.argb(alpha, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
