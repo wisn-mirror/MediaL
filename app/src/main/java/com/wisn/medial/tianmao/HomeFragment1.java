@@ -1,6 +1,7 @@
 package com.wisn.medial.tianmao;
 
 import android.animation.ArgbEvaluator;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,11 +21,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -129,7 +137,7 @@ public class HomeFragment1 extends Fragment {
                 mark.setTranslationY(-scrollY);
                 int alpha = (int) sc * 255;
 
-                Log.e(TAG, "onScrollChange: " + i1 + "scrollY:" + scrollY + "----" + sc+"alpha =" + alpha + " oldScrollY:" + oldScrollY + "  v.getScaleY:" + v.getScaleY());
+                Log.e(TAG, "onScrollChange: " + i1 + "scrollY:" + scrollY + "----" + sc + "alpha =" + alpha + " oldScrollY:" + oldScrollY + "  v.getScaleY:" + v.getScaleY());
                 if (sc > 0.2 && sc < 0.8) {
                     mToolbarSearch.setVisibility(View.VISIBLE);
                     mToobarSmall.setVisibility(View.VISIBLE);
@@ -161,7 +169,6 @@ public class HomeFragment1 extends Fragment {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     Log.i(TAG, "BOTTOM SCROLL");
                 }
-
             }
         });
         for (int i = 0; i < tabTxt.length; i++) {
@@ -212,37 +219,86 @@ public class HomeFragment1 extends Fragment {
             public Object instantiateItem(@NonNull ViewGroup container, int positionTab) {
                 RecyclerView recyclerView = new RecyclerView(getContext());
                 recyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                GridLayoutManager layout = new GridLayoutManager(getContext(), 2);
+                StaggeredGridLayoutManager layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(layout);
                 recyclerView.setAdapter(new RecyclerView.Adapter() {
+                    public static final int video = 1;
+                    public static final int product = 0;
+                    int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
+
+
                     @NonNull
                     @Override
                     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                        LinearLayout linearLayout = new LinearLayout(getContext());
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-                        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        TextView textView = new TextView(getContext());
-                        ImageView imageView = new ImageView(getContext());
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        linearLayout.addView(imageView);
-                        linearLayout.addView(textView);
-                        return new ViewHoderM(linearLayout);
+                        if (i == product) {
+                            LinearLayout linearLayout = new LinearLayout(getContext());
+                            linearLayout.setOrientation(LinearLayout.VERTICAL);
+                            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            TextView textView = new TextView(getContext());
+                            ImageView imageView = new ImageView(getContext());
+                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            linearLayout.addView(imageView);
+                            linearLayout.addView(textView);
+                            return new ViewHoderM(linearLayout);
+                        } else {
+                            FrameLayout linearLayout = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_exo_player, null);
+                            CardView cardview = linearLayout.findViewById(R.id.cardview);
+                            cardview.setLayoutParams(new FrameLayout.LayoutParams((int) (screenWidth / 2.4), screenWidth / 2));
+                            return new ViewHoderM(linearLayout);
+                        }
                     }
 
                     @Override
                     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-                        LinearLayout linearLayout = (LinearLayout) viewHolder.itemView;
-                        ImageView imageView = (ImageView) linearLayout.getChildAt(0);
-                        int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
-                        imageView.setLayoutParams(new LinearLayout.LayoutParams(screenWidth / 2, screenWidth / 2));
-                        TextView tv = (TextView) linearLayout.getChildAt(1);
-                        tv.setText(tabTxt[positionTab]);
-                        GlideApp.with(getContext()).load(Constants.res[position]).into(imageView);
+                        int i = getItemViewType(position);
+                        if (i == product) {
+                            LinearLayout linearLayout = (LinearLayout) viewHolder.itemView;
+                            ImageView imageView = (ImageView) linearLayout.getChildAt(0);
+                            imageView.setLayoutParams(new LinearLayout.LayoutParams(screenWidth / 2, screenWidth / 2));
+                            TextView tv = (TextView) linearLayout.getChildAt(1);
+                            tv.setText(tabTxt[positionTab]);
+                            GlideApp.with(getContext()).load(Constants.res[position]).into(imageView);
+                        } else {
+                            FrameLayout linearLayout = (FrameLayout) viewHolder.itemView;
+
+                            PlayerView playerView = linearLayout.findViewById(R.id.playerView);
+                            ExoPlayer player = ExoPlayerFactory.newSimpleInstance(getContext());
+
+                            playerView.setPlayer(player);
+
+                            player.setPlayWhenReady(false);
+                            ExtractorMediaSource.Factory aaa = new ExtractorMediaSource.Factory(
+                                    new DefaultHttpDataSourceFactory("wisn"));
+                            ExtractorMediaSource mediaSource = aaa.createMediaSource(Uri.parse(Constants.ip + Constants.local_resvideo[0]));
+                            player.prepare(mediaSource, true, false);
+                        }
+
+                    }
+
+                    @Override
+                    public int getItemViewType(int position) {
+//                        return super.getItemViewType(position);
+                        if (position == 3 || position == 8) {
+                            return video;
+                        } else {
+                            return product;
+                        }
                     }
 
                     @Override
                     public int getItemCount() {
                         return Constants.res.length;
+                    }
+                });
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
                     }
                 });
                 container.addView(recyclerView);

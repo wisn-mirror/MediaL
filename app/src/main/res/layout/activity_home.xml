@@ -10,14 +10,14 @@
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/tottom" />
+        android:layout_marginBottom="10dp" />
 
 
     <LinearLayout
         android:id="@+id/tottom"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        android:background="@android:color/transparent"
+        android:layout_height="90dp"
+        android:background="@color/trans"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
@@ -46,7 +46,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             android:background="@drawable/right">
 
         </LinearLayout>
