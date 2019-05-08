@@ -37,26 +37,7 @@ public class CustomViewHolder2 implements BannerViewHolder<CustomData> {
                 Toast.makeText(context,"position:"+position,Toast.LENGTH_SHORT).show();
             }
         });
-//        Glide.with(context).load(Constants.res[position]) .onlyRetrieveFromCache(true).into(image);
          Glide.with(context).load(Constants.res[position]).dontAnimate().into(image);
-    /*    Glide.with(context).load(Constants.res[position]).into(new SimpleTarget() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition transition) {
-
-            }
-            *//*@Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition transition) {
-                image.setImageBitmap(resource);
-
-            }
-*//*
-        });*/
-//        Glide.with(context).load(Constants.res[position]).into(new SimpleTarget<Drawable>() {
-//            @Override
-//            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-//                image.setImageDrawable(resource);
-//            }
-//        });
 
     }
 }

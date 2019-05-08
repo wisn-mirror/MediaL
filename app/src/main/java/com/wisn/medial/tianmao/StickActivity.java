@@ -17,7 +17,7 @@ public class StickActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_list);
+        setContentView(R.layout.activity_home);
         fl_content = findViewById(R.id.fl_content);
         imageListFragment = new HomeFragment1();
         FragmentManager fragmentManager = getSupportFragmentManager();

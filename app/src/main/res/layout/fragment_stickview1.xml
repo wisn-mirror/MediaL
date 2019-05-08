@@ -11,11 +11,21 @@
         android:layout_width="match_parent"
         android:layout_height="70dp" />
 
-    <com.wisn.medial.tianmao.MSwipeRefreshLayout
+    <com.wisn.medial.tianmao.MView
+        android:id="@+id/mark"
+        android:layout_width="match_parent"
+        android:layout_height="480dp" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="70dp">
+
+        <com.wisn.medial.tianmao.mClassicsHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <com.wisn.medial.tianmao.CustomScrollView
             android:id="@+id/scrollView"
@@ -26,16 +36,11 @@
             android:focusableInTouchMode="true"
             android:visibility="visible">
 
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:descendantFocusability="blocksDescendants">
 
-                <ImageView
-                    android:id="@+id/mark"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,7 +90,7 @@
             </FrameLayout>
         </com.wisn.medial.tianmao.CustomScrollView>
 
-    </com.wisn.medial.tianmao.MSwipeRefreshLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <RelativeLayout
         android:id="@+id/mainfragment_root_view"

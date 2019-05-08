@@ -52,9 +52,6 @@
             android:name=".scale.ScaleActivity"
             android:theme="@style/activity" />
         <activity
-            android:name=".tianmao.SlideDemo"
-            android:theme="@style/activity" />
-        <activity
             android:name=".tianmao.StickActivity"
             android:theme="@style/activity" />
         <activity

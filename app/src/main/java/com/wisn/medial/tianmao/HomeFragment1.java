@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
 import com.wisn.medial.src.Constants;
@@ -68,13 +70,15 @@ public class HomeFragment1 extends Fragment {
     private View mToolbarSearch;
     private int mMaskColor;     //三个模块的背景主题色
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SmartRefreshLayout swipeRefreshLayout;
     private View botton_big;
     private View v_title_big_mask;
-    private View mark;
+    private MView mark;
     private ArgbEvaluator mMArgbEvaluator;
     private View marktop;
     private int colorBg[] =new int[4];
+    private mClassicsHeader header;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,6 +105,9 @@ public class HomeFragment1 extends Fragment {
         v_title_big_mask = view.findViewById(R.id.v_title_big_mask);
         viewpage = view.findViewById(R.id.viewpage);
 
+        header = view.findViewById(R.id.header);
+        header.setBackgroundColor(getResources().getColor(R.color.trans));
+        header.setmView(mark);
         mToobarSmall = view.findViewById(R.id.toolbar_small);
         mToolbarSearch = view.findViewById(R.id.toolbar_search);
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
@@ -113,6 +120,7 @@ public class HomeFragment1 extends Fragment {
             public void onScrollChanged() {
                 // 这只一定是 == ,不能是 <= ,scrollView 会自己调整
                 swipeRefreshLayout.setEnabled(scrollView.getScrollY() == 0);
+                mark.getLayoutParams();
             }
         });
 
@@ -168,13 +176,13 @@ public class HomeFragment1 extends Fragment {
             holderTabLayout.addTab(holderTabLayout.newTab().setText(tabTxt[i]));
             realTabLayout.addTab(realTabLayout.newTab().setText(tabTxt[i]));
         }
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 swipeRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
+                        swipeRefreshLayout.finishRefresh(false);
                     }
                 }, 2000);
             }
@@ -314,8 +322,6 @@ public class HomeFragment1 extends Fragment {
                             .setPages(list, new CustomViewHolder2())
                             .setBannerStyle(BannerConfig.NOT_INDICATOR)
                             .setBannerAnimation(Transformer.Scale)
-//                            .setPageLeftMargin((int) dip2px(30))
-//                            .setPageRightMargin((int) dip2px(30))
                             .start();
                     initIndicator(indicator);
                     banner1.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -325,7 +331,7 @@ public class HomeFragment1 extends Fragment {
                                     colorBg[(position + 1) % colorBg.length]);
                             Log.d("onPageScrolled","position:"+position+ " positionOffset:"+positionOffset+" color："+color);
 
-                            mark.setBackgroundColor(color);
+                            mark.setColor(color);
                             marktop.setBackgroundColor(color);
 
                         }

@@ -12,7 +12,6 @@ import com.wisn.medial.ad.ImageSlideAcitivity;
 import com.wisn.medial.ad.VideoViewActivity;
 import com.wisn.medial.download.DownloadListActivity;
 import com.wisn.medial.imagelist.ImageListActivity;
-import com.wisn.medial.tianmao.SlideDemo;
 import com.wisn.medial.tianmao.StickActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, DownloadListActivity.class));
                 break;
             case R.id.bt_demo:
-                startActivity(new Intent(this, SlideDemo.class));
-//                startActivity(new Intent(this, StickActivity.class));
+//                startActivity(new Intent(this, SlideDemo.class));
+                startActivity(new Intent(this, StickActivity.class));
                 break;
 
         }
