@@ -1,7 +1,6 @@
 package com.wisn.medial.tianmao;
 
 import android.animation.ArgbEvaluator;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -73,11 +72,10 @@ public class HomeFragment1 extends Fragment {
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
     private SmartRefreshLayout swipeRefreshLayout;
     private View botton_big;
-    private View v_title_big_mask;
     private MView mark;
     private ArgbEvaluator mMArgbEvaluator;
     private View marktop;
-    private int colorBg[] =new int[4];
+    private int colorBg[] = new int[4];
     private mClassicsHeader header;
 
     @Nullable
@@ -86,10 +84,10 @@ public class HomeFragment1 extends Fragment {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         View view = inflater.inflate(R.layout.fragment_stickview1, null);
-       colorBg[0] =getResources().getColor(R.color.colorPrimary);
-       colorBg[1] =getResources().getColor(R.color.colorPrimaryDark);
-        colorBg[2] =getResources().getColor(R.color.colorAccent);
-        colorBg[3] =getResources().getColor(R.color.mainColor);
+        colorBg[0] = getResources().getColor(R.color.colorPrimary);
+        colorBg[1] = getResources().getColor(R.color.colorPrimaryDark);
+        colorBg[2] = getResources().getColor(R.color.colorAccent);
+        colorBg[3] = getResources().getColor(R.color.mainColor);
 
         initView(view);
         return view;
@@ -103,13 +101,12 @@ public class HomeFragment1 extends Fragment {
         scrollView = view.findViewById(R.id.scrollView);
         botton_big = view.findViewById(R.id.botton_big);
         recycler_view = view.findViewById(R.id.recycler_view);
-        v_title_big_mask = view.findViewById(R.id.v_title_big_mask);
         viewpage = view.findViewById(R.id.viewpage);
 
         header = view.findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.trans));
         header.setmView(mark);
-        mark.setConfig(DensityUtil.dp2px(260),DensityUtil.dp2px(20));
+        mark.setConfig(DensityUtil.dp2px(260), DensityUtil.dp2px(20));
         mToobarSmall = view.findViewById(R.id.toolbar_small);
         mToolbarSearch = view.findViewById(R.id.toolbar_search);
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
@@ -120,7 +117,6 @@ public class HomeFragment1 extends Fragment {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                // 这只一定是 == ,不能是 <= ,scrollView 会自己调整
                 swipeRefreshLayout.setEnabled(scrollView.getScrollY() == 0);
 
             }
@@ -130,18 +126,10 @@ public class HomeFragment1 extends Fragment {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 float sc = (float) scrollY / i1;
-//                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mark.getLayoutParams();
-//                layoutParams.topMargin=-scrollY;
-//                mark.set
                 mark.setTranslationY(-scrollY);
-                Log.e(TAG, "onScrollChange: " + i1 + "scrollY:" + scrollY + "----" + sc + " oldScrollY:" + oldScrollY+"  v.getScaleY:" +v.getScaleY());
                 int alpha = (int) sc * 255;
-                Log.i("NewHomeFragment", "alpha =" + alpha);
-                int argb = Color.argb(alpha, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
-                int argbDouble = Color.argb((alpha * 2) > 255 ? 255 : alpha * 2, Color.red(mMaskColor), Color.green(mMaskColor), Color.blue(mMaskColor));
-                //appBarLayout上滑一半距离后小图标应该由渐变到全透明
-                int title_small_argb = Color.argb(255 - alpha, Color.red(mMaskColor),
-                        Color.green(mMaskColor), Color.blue(mMaskColor));
+
+                Log.e(TAG, "onScrollChange: " + i1 + "scrollY:" + scrollY + "----" + sc+"alpha =" + alpha + " oldScrollY:" + oldScrollY + "  v.getScaleY:" + v.getScaleY());
                 if (sc > 0.2 && sc < 0.8) {
                     mToolbarSearch.setVisibility(View.VISIBLE);
                     mToobarSmall.setVisibility(View.VISIBLE);
@@ -156,7 +144,6 @@ public class HomeFragment1 extends Fragment {
                 }
                 mToolbarSearch.setAlpha(1f - sc);
                 mToobarSmall.setAlpha(sc + 0.2f);
-                v_title_big_mask.setBackgroundColor(argb);
 
                 //监听滚动状态
 
@@ -289,7 +276,7 @@ public class HomeFragment1 extends Fragment {
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         List<CustomData> list = new ArrayList<>();
         for (int i = 0; i < colorBg.length; i++) {
-            list.add(new CustomData(Constants.res[i],String.valueOf(i),true));
+            list.add(new CustomData(Constants.res[i], String.valueOf(i), true));
         }
         recycler_view.setAdapter(new RecyclerView.Adapter() {
             private int lastPosition = 0;
@@ -298,7 +285,7 @@ public class HomeFragment1 extends Fragment {
             private int mIndicatorSelectedResId = R.drawable.indicator;
             private int mIndicatorUnselectedResId = R.drawable.indicator2;
 
-            private void initIndicator( LinearLayout indicator) {
+            private void initIndicator(LinearLayout indicator) {
                 for (int i = 0; i < list.size(); i++) {
                     ImageView imageView = new ImageView(getContext());
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -315,13 +302,14 @@ public class HomeFragment1 extends Fragment {
                     indicator.addView(imageView, custom_params);
                 }
             }
+
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 if (i == 2) {
                     LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_recycle, null);
-                    Banner banner1= linearLayout.findViewById(R.id.banner1);
-                    LinearLayout indicator= linearLayout.findViewById(R.id.indicator);
+                    Banner banner1 = linearLayout.findViewById(R.id.banner1);
+                    LinearLayout indicator = linearLayout.findViewById(R.id.indicator);
                     banner1.setAutoPlay(true)
                             .setDelayTime(2700)
                             .setPages(list, new CustomViewHolder2())
@@ -334,7 +322,7 @@ public class HomeFragment1 extends Fragment {
                         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                             int color = (int) mMArgbEvaluator.evaluate(positionOffset, colorBg[position % colorBg.length],
                                     colorBg[(position + 1) % colorBg.length]);
-                            Log.d("onPageScrolled","position:"+position+ " positionOffset:"+positionOffset+" color："+color);
+                            Log.d("onPageScrolled", "position:" + position + " positionOffset:" + positionOffset + " color：" + color);
 
                             mark.setColor(color);
                             marktop.setBackgroundColor(color);

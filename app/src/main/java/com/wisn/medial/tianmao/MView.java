@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
-
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 /**
@@ -125,19 +124,24 @@ public class MView extends RelativeLayout {
         isAnimation = true;
         DecelerateInterpolator interpolator = new DecelerateInterpolator();
         final float reboundHeight = Math.min(mWaveHeight * 0.8f, mHeadHeight / 1.6f);
+//        ValueAnimator waveAnimator = ValueAnimator.ofFloat(
+//                mWaveHeight, mWaveHeightPre,
+//                -(reboundHeight * 1.0f), mWaveHeightPre,
+//                -(reboundHeight * 0.4f), mWaveHeightPre
+//        );
         ValueAnimator waveAnimator = ValueAnimator.ofFloat(
-                mWaveHeight, mWaveHeightPre,
-                -(reboundHeight * 1.0f), mWaveHeightPre,
-                -(reboundHeight * 0.4f), mWaveHeightPre
+                mWaveHeight, mWaveHeightPre
         );
         waveAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float curValue = (float) animation.getAnimatedValue();
                 Log.d("MView", "onAnimationUpdate curValue:" + curValue);
-                if (!mWavePulling) {
-                    mWaveHeight = curValue;
-                }
+//                if (!mWavePulling) {
+//                    mWaveHeight = curValue;
+//                }
+                mWaveHeight = curValue;
+
                 if (0f == curValue) {
                     Log.d("MView", "onAnimationUpdate aaaaa:" + curValue);
                     isAnimation = true;
@@ -146,7 +150,7 @@ public class MView extends RelativeLayout {
             }
         });
         waveAnimator.setInterpolator(interpolator);
-        waveAnimator.setDuration(1000);
+        waveAnimator.setDuration(300);
         waveAnimator.start();
     }
 
