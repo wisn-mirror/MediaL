@@ -62,10 +62,9 @@ public class ExoPlayerActivity extends AppCompatActivity {
         playerView = findViewById(R.id.playerView);
         player = ExoPlayerFactory.newSimpleInstance(this);
 //        player = ExoPlayerFactory.newSimpleInstance( new DefaultRenderersFactory(this),
-//                new DefaultTrackSelector(), new DefaultLoadControl());
+//        new DefaultTrackSelector(), new DefaultLoadControl());
 
         playerView.setPlayer(player);
-
         player.setPlayWhenReady(playWhenReady);
 //        player.seekTo(currentWindow, playbackPosition);
 //        Uri uri = Uri.parse(Constants.ip + "video_ccc.mp4");

@@ -1,7 +1,6 @@
 package com.wisn.medial.tianmao;
 
 import android.animation.ArgbEvaluator;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -27,11 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.bumptech.glide.Glide;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -72,7 +66,7 @@ public class HomeFragment1 extends Fragment {
     private ViewTreeObserver.OnGlobalLayoutListener listener;
     private ViewPager viewpage;
     private RecyclerView recycler_view;
-    private String TAG = "StickActivity";
+    private String TAG = "HomeFragment1";
     private PagerAdapter adapter;
     private View mToobarSmall;
     private View mToolbarSearch;
@@ -85,18 +79,17 @@ public class HomeFragment1 extends Fragment {
     private View marktop;
     private int colorBg[] = new int[4];
     private mClassicsHeader header;
+    private VideoCheck check;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
         View view = inflater.inflate(R.layout.fragment_stickview1, null);
         colorBg[0] = getResources().getColor(R.color.colorPrimary);
         colorBg[1] = getResources().getColor(R.color.colorPrimaryDark);
         colorBg[2] = getResources().getColor(R.color.colorAccent);
         colorBg[3] = getResources().getColor(R.color.mainColor);
-
         initView(view);
         return view;
     }
@@ -110,6 +103,7 @@ public class HomeFragment1 extends Fragment {
         botton_big = view.findViewById(R.id.botton_big);
         recycler_view = view.findViewById(R.id.recycler_view);
         viewpage = view.findViewById(R.id.viewpage);
+        check = new VideoCheck();
 
         header = view.findViewById(R.id.header);
         header.setBackgroundColor(getResources().getColor(R.color.trans));
@@ -242,9 +236,7 @@ public class HomeFragment1 extends Fragment {
                             return new ViewHoderM(linearLayout);
                         } else {
                             FrameLayout linearLayout = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_exo_player, null);
-                            CardView cardview = linearLayout.findViewById(R.id.cardview);
-                            cardview.setLayoutParams(new FrameLayout.LayoutParams((int) (screenWidth / 2.4), screenWidth / 2));
-                            return new ViewHoderM(linearLayout);
+                            return new VideoViewHoderM(linearLayout);
                         }
                     }
 
@@ -259,26 +251,16 @@ public class HomeFragment1 extends Fragment {
                             tv.setText(tabTxt[positionTab]);
                             GlideApp.with(getContext()).load(Constants.res[position]).into(imageView);
                         } else {
-                            FrameLayout linearLayout = (FrameLayout) viewHolder.itemView;
-
-                            PlayerView playerView = linearLayout.findViewById(R.id.playerView);
-                            ExoPlayer player = ExoPlayerFactory.newSimpleInstance(getContext());
-
-                            playerView.setPlayer(player);
-
-                            player.setPlayWhenReady(false);
-                            ExtractorMediaSource.Factory aaa = new ExtractorMediaSource.Factory(
-                                    new DefaultHttpDataSourceFactory("wisn"));
-                            ExtractorMediaSource mediaSource = aaa.createMediaSource(Uri.parse(Constants.ip + Constants.local_resvideo[0]));
-                            player.prepare(mediaSource, true, false);
+                            VideoViewHoderM videoViewHoderM = (VideoViewHoderM) viewHolder;
+                            videoViewHoderM.preview();
+                            Log.d(TAG, "preview position:" + position+" "+videoViewHoderM);
                         }
 
                     }
 
                     @Override
                     public int getItemViewType(int position) {
-//                        return super.getItemViewType(position);
-                        if (position == 3 || position == 8) {
+                        if (position == 3 || position == 8||position == 14||position == 15||position == 20) {
                             return video;
                         } else {
                             return product;
@@ -291,15 +273,43 @@ public class HomeFragment1 extends Fragment {
                     }
                 });
                 recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                    //用来标记是否正在向最后一个滑动
+                    boolean isSlidingToLast = false;
+
                     @Override
-                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
+                        if (getActivity() == null || getActivity().isFinishing()) {
+                            return;
+                        }
+                        check.checkVideo(recyclerView,newState);
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            // 当不滚动时
+                            Glide.with(getActivity()).resumeRequests();
+                        } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                            // Log.i("SCROLL_STATE_DRAGGING", "手滑动：SCROLL_STATE_DRAGGING");
+                            Glide.with(getActivity()).pauseRequests();
+                        } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+                            // Log.i("SCROLL_STATE_SETTLING", "松开惯性滑动：SCROLL_STATE_SETTLING");
+                            Glide.with(getActivity()).resumeRequests();
+                        }
                     }
 
                     @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
+                        check.onScrolled(recyclerView,dx,dy);
+                        //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
+                        if (dy > 0) {
+                            //大于0表示正在向右滚动
+                            isSlidingToLast = true;
+                        } else {
+                            //小于等于0表示停止或向左滚动
+                            isSlidingToLast = false;
+                        }
                     }
+
                 });
                 container.addView(recyclerView);
                 return recyclerView;

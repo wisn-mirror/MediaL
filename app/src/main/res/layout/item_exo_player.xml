@@ -11,10 +11,19 @@
         android:layout_height="200dp"
         app:cardCornerRadius="20dp">
 
+        <ImageView
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:surface_type="texture_view"
+            android:scaleType="centerCrop"
+            app:resize_mode="zoom"
             app:use_controller="false" />
 
     </android.support.v7.widget.CardView>

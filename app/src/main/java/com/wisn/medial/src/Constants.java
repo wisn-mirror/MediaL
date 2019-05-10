@@ -22,6 +22,8 @@ public class Constants {
     };
 
     public static final String[] local_resvideo = {
+            "media/video/GameofThrones.mp4",
+            "media/video/newhome.mp4",
             "media/video/video_aaa.mp4",
             "media/video/video_bbb.mp4",
             "media/video/video_ccc.mp4",
