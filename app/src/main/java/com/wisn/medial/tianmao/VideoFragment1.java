@@ -25,7 +25,7 @@ import com.wisn.medial.src.Constants;
  * Created by Wisn on 2019-05-09 10:07.
  */
 public class VideoFragment1 extends Fragment {
-    private static String TAG = "VideoFragment";
+    private static String TAG = "VideoFragment1";
 
     private RecyclerView recyclerView;
     private StaggeredGridLayoutManager layout;

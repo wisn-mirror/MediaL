@@ -22,8 +22,11 @@ public class VideoCheck {
     public ExoPlayer player;
     private int adapterPosition;
     View currentPlayView;
+    NestedRecyclerViewHelper helper;
 
-
+    public void setHelper(NestedRecyclerViewHelper helper) {
+        this.helper = helper;
+    }
 
     public void playPosition(VideoViewHoderM videoViewHoderM) {
         int index = 0;
@@ -147,13 +150,16 @@ public class VideoCheck {
 
 
     public void checkVideo(RecyclerView recyclerView, int newState) {
+
+
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+
             // 当不滚动时
             int childCount = recyclerView.getChildCount();
 //            Log.d(TAG, "childCount:" + childCount);
             VideoViewHoderM videoViewHoder = null;
-            for (int i = 0; i < childCount; i++) {
+          /*  for (int i = 0; i < childCount; i++) {
                 View view = recyclerView.getChildAt(i);
                 if (view == null) continue;
                 RecyclerView.ViewHolder childViewHolder = recyclerView.getChildViewHolder(view);
@@ -166,6 +172,16 @@ public class VideoCheck {
                         break;
                     }
                 }
+            }*/
+//            int[] visiblePosition = getVisiblePosition((GridLayoutManager) recyclerView.getLayoutManager());
+            int childStart = helper.getChildStart(recyclerView);
+            int childEnd = helper.getChildEnd(recyclerView);
+            for (int i = childStart; i < childEnd; i++) {
+                RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
+                if (vh instanceof VideoViewHoderM) {
+                    videoViewHoder = (VideoViewHoderM) vh;
+                    break;
+                 }
             }
 //            if (adapterPosition > last || adapterPosition < first) {
 //                RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(adapterPosition);
@@ -187,6 +203,63 @@ public class VideoCheck {
             // Log.i("SCROLL_STATE_SETTLING", "松开惯性滑动：SCROLL_STATE_SETTLING");
         }
     }
+/*
+
+
+    public void checkVideo(RecyclerView recyclerView, int newState) {
+
+
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            // 当不滚动时
+            int childCount = recyclerView.getChildCount();
+//            Log.d(TAG, "childCount:" + childCount);
+            VideoViewHoderM videoViewHoder = null;
+          */
+/*  for (int i = 0; i < childCount; i++) {
+                View view = recyclerView.getChildAt(i);
+                if (view == null) continue;
+                RecyclerView.ViewHolder childViewHolder = recyclerView.getChildViewHolder(view);
+                if (null != childViewHolder) {
+//                    Log.d(TAG, "childViewHolder:" + childViewHolder + "  ViewHoderMType：" + (childViewHolder instanceof ViewHoderM) + "  VideoViewHoderMType：" + (childViewHolder instanceof VideoViewHoderM));
+                    if (childViewHolder instanceof VideoViewHoderM) {
+                        int[] location = new int[2];
+                        childViewHolder.itemView.getLocationOnScreen(location);
+                        videoViewHoder = (VideoViewHoderM) childViewHolder;
+                        break;
+                    }
+                }
+            }*//*
+
+            int[] visiblePosition = getVisiblePosition((GridLayoutManager) recyclerView.getLayoutManager());
+            for (int i = visiblePosition[0]; i < visiblePosition[1]; i++) {
+                RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(i);
+                if (vh instanceof VideoViewHoderM) {
+                    videoViewHoder = (VideoViewHoderM) vh;
+                    break;
+                 }
+            }
+//            if (adapterPosition > last || adapterPosition < first) {
+//                RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(adapterPosition);
+//                if (vh instanceof VideoViewHoderM) {
+//                    ((VideoViewHoderM) vh).preview();
+//                }
+//            }
+            if (videoViewHoder != null) {
+                int playosition = videoViewHoder.getAdapterPosition();
+                if (playosition != adapterPosition) {
+                    playPosition(videoViewHoder);
+                    adapterPosition = playosition;
+                }
+            }
+
+        } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+            // Log.i("SCROLL_STATE_DRAGGING", "手滑动：SCROLL_STATE_DRAGGING");
+        } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+            // Log.i("SCROLL_STATE_SETTLING", "松开惯性滑动：SCROLL_STATE_SETTLING");
+        }
+    }
+*/
 
     public void setPlayPosition(int adapterPosition) {
         this.adapterPosition = adapterPosition;

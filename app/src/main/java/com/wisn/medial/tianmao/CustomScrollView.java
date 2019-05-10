@@ -14,6 +14,7 @@ public class CustomScrollView extends NestedScrollView {
     private int slop;
     private int touch;
     public Callbacks mCallbacks;
+    public Callback2 mCallbacks2;
 
     public CustomScrollView(Context context) {
         super(context);
@@ -38,11 +39,19 @@ public class CustomScrollView extends NestedScrollView {
         this.mCallbacks = callbacks;
     }
 
+    public void setCallback2(Callback2 callbacks) {
+        this.mCallbacks2 = callbacks;
+    }
+
+
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         if (mCallbacks != null) {
             mCallbacks.onScrollChanged(l, t, oldl, oldt);
+        }
+        if (mCallbacks2 != null) {
+            mCallbacks2.onScrollChanged(l, t, oldl, oldt);
         }
     }
 
@@ -51,10 +60,16 @@ public class CustomScrollView extends NestedScrollView {
         void onScrollChanged(int x, int y, int oldx, int oldy);
     }
 
+    public interface Callback2 {
+        void onScrollChanged(int x, int y, int oldx, int oldy);
+    }
+
 
     /**
      * 是否intercept当前的触摸事件
+     *
      * @param ev 触摸事件
+     *
      * @return true：调用onMotionEvent()方法，并完成滑动操作
      */
     @Override
@@ -75,10 +90,11 @@ public class CustomScrollView extends NestedScrollView {
 
     /**
      * 获取相应context的touch slop值（即在用户滑动之前，能够滑动的以像素为单位的距离）
+     *
      * @param context ScrollView对应的context
      */
     private void setSlop(Context context) {
-        slop = ViewConfiguration.get(context).getScaledTouchSlop()*2;
+        slop = ViewConfiguration.get(context).getScaledTouchSlop() * 2;
     }
 
 }

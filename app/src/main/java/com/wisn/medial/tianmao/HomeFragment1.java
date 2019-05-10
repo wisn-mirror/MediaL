@@ -9,9 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -116,6 +116,7 @@ public class HomeFragment1 extends Fragment {
         mToolbarSearch.setVisibility(View.VISIBLE);
         mToobarSmall.setVisibility(View.GONE);
         float i1 = dip2px(103);
+
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -213,7 +214,10 @@ public class HomeFragment1 extends Fragment {
             public Object instantiateItem(@NonNull ViewGroup container, int positionTab) {
                 RecyclerView recyclerView = new RecyclerView(getContext());
                 recyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                StaggeredGridLayoutManager layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+                GridLayoutManager layout = new GridLayoutManager(getContext(),2);
+                NestedRecyclerViewHelper helper=new NestedRecyclerViewHelper(layout);
+                helper. setNestedScrollView(scrollView);
+                check.setHelper(helper);
                 recyclerView.setLayoutManager(layout);
                 recyclerView.setAdapter(new RecyclerView.Adapter() {
                     public static final int video = 1;
@@ -280,6 +284,8 @@ public class HomeFragment1 extends Fragment {
                     @Override
                     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
+                        Log.d(TAG, "addOnScrollListener111 newState:" + newState);
+
                         if (getActivity() == null || getActivity().isFinishing()) {
                             return;
                         }
@@ -299,6 +305,8 @@ public class HomeFragment1 extends Fragment {
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
+                        Log.d(TAG, "addOnScrollListener111 onScrolled y:" + dy);
+
                         check.onScrolled(recyclerView,dx,dy);
                         //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
                         if (dy > 0) {

@@ -57,7 +57,7 @@
                         android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false" />
+                        android:nestedScrollingEnabled="true" />
                     <!--占位的tablayout-->
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tablayout_holder"
@@ -73,7 +73,7 @@
                         android:id="@+id/viewpage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false" />
+                        android:nestedScrollingEnabled="true" />
                 </LinearLayout>
 
 
