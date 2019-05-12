@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -120,11 +119,35 @@ public class HomeFragment1 extends Fragment {
             @Override
             public void onScrollChanged() {
                 swipeRefreshLayout.setEnabled(scrollView.getScrollY() == 0);
+              int  scrollY=  scrollView.getScrollY();
+                float sc = (float) scrollY / i1;
+                mark.setTranslationY(-scrollY);
+                int alpha = (int) sc * 255;
 
+//                Log.e(TAG, "onScrollChange: " + i1 + "scrollY:" + scrollY + "----" + sc + "alpha =" + alpha + " oldScrollY:" + oldScrollY + "  v.getScaleY:" + v.getScaleY());
+                if (sc > 0.2 && sc < 0.8) {
+                    mToolbarSearch.setVisibility(View.VISIBLE);
+                    mToobarSmall.setVisibility(View.VISIBLE);
+                }
+                if (sc <= 0.5) {
+                    mToolbarSearch.setVisibility(View.VISIBLE);
+                    mToobarSmall.setVisibility(View.GONE);
+                }
+                if (sc > 0.5) {
+                    mToolbarSearch.setVisibility(View.GONE);
+                    mToobarSmall.setVisibility(View.VISIBLE);
+                }
+                mToolbarSearch.setAlpha(1f - sc);
+                mToobarSmall.setAlpha(sc + 0.2f);
             }
         });
+     /*   scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            }
+        });*/
+      /*  scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 float sc = (float) scrollY / i1;
@@ -164,7 +187,7 @@ public class HomeFragment1 extends Fragment {
                     Log.i(TAG, "BOTTOM SCROLL");
                 }
             }
-        });
+        });*/
         for (int i = 0; i < tabTxt.length; i++) {
             holderTabLayout.addTab(holderTabLayout.newTab().setText(tabTxt[i]));
             realTabLayout.addTab(realTabLayout.newTab().setText(tabTxt[i]));

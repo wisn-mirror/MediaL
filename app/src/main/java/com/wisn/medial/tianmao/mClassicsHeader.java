@@ -29,18 +29,18 @@ public class mClassicsHeader extends LyfMineRefreshHeader {
     @Override
     public void onMoving(boolean isDragging, float percent, int offset, int height, int maxDragHeight) {
         super.onMoving(isDragging, percent, offset, height, maxDragHeight);
-        mView.onMoving(isDragging, percent, offset, height, maxDragHeight);
+        if (mView != null) mView.onMoving(isDragging, percent, offset, height, maxDragHeight);
     }
 
     public int onFinish(@NonNull RefreshLayout layout, boolean success) {
-        mView.onFinish(layout,success);
+        if (mView != null) mView.onFinish(layout, success);
         return super.onFinish(layout, success);
     }
 
     @Override
     public void onReleased(@NonNull RefreshLayout refreshLayout, int height, int maxDragHeight) {
         super.onReleased(refreshLayout, height, maxDragHeight);
-        mView.onReleased(refreshLayout,height,maxDragHeight);
+        if (mView != null) mView.onReleased(refreshLayout, height, maxDragHeight);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.wisn.medial.ad.ExoPlayerActivity;
 import com.wisn.medial.ad.ImageSlideAcitivity;
 import com.wisn.medial.ad.VideoViewActivity;
 import com.wisn.medial.download.DownloadListActivity;
+import com.wisn.medial.finalview.Stick2Activity;
 import com.wisn.medial.imagelist.ImageListActivity;
 import com.wisn.medial.tianmao.StickActivity;
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,//存储
                     Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
-        startActivity(new Intent(this, StickActivity.class));
+        startActivity(new Intent(this, Stick2Activity.class));
 
     }
 

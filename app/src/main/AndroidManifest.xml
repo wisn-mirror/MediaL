@@ -55,6 +55,9 @@
             android:name=".tianmao.StickActivity"
             android:theme="@style/activity" />
         <activity
+            android:name=".finalview.Stick2Activity"
+            android:theme="@style/activity" />
+        <activity
             android:name=".imagelist.preview.FullScreenImageActivity"
             android:theme="@style/TransparentWindow" />
     </application>
