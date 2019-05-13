@@ -41,6 +41,7 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
     private int mCurrentPosition = -1;
     private HomeContinuousNestedBottomView.OnScrollNotifier mOnScrollNotifier;
     private TabLayout tabLayout;
+    private HomePagerAdapter adapter;
 
     public HomeBottomView(Context context) {
         super(context);
@@ -81,16 +82,15 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
     @Override
     protected View onCreateContentView() {
         mViewPager = new MyViewPager(getContext());
-        mViewPager.setAdapter(new HomePagerAdapter() {
+        adapter = new HomePagerAdapter() {
 
             @Override
             protected Object hydrate(ViewGroup container, int position) {
-
                 HomeContinuousNestedBottomRecyclerView recyclerView = new HomeContinuousNestedBottomRecyclerView(getContext());
                 GridLayoutManager staggeredGridLayoutManager = new GridLayoutManager(getContext(), 2) {
                     @Override
                     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-                        return new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        return new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.MATCH_PARENT);
                     }
                 };
@@ -135,14 +135,6 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
                             videoViewHoderM.preview();
                             Log.d(TAG, "preview position:" + position + " " + videoViewHoderM);
                         }
-
-                    }
-
-                    @Override
-                    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-                        super.onViewRecycled(holder);
-
-                        Log.d(TAG, "preview position onViewRecycled:" + holder.getAdapterPosition() + " " + holder + " " + (holder instanceof VideoViewHoderM));
 
                     }
 
@@ -195,7 +187,6 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
                             isSlidingToLast = false;
                         }
                     }
-
                 });
                 return recyclerView;
             }
@@ -208,6 +199,7 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
             @Override
             protected void destroy(ViewGroup container, int position, Object object) {
                 container.removeView((View) object);
+
             }
 
             @Override
@@ -228,8 +220,10 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
                 if (mOnScrollNotifier != null) {
                     mCurrentItemView.injectScrollNotifier(mOnScrollNotifier);
                 }
+                check.initCheck(mCurrentItemView);
             }
-        });
+        };
+        mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -239,6 +233,7 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
             @Override
             public void onPageSelected(int i) {
                 tabLayout.setScrollPosition(i, 0, true);
+                check.onPageSelected(mCurrentItemView);
             }
 
             @Override
@@ -246,6 +241,7 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
 
             }
         });
+
         return mViewPager;
     }
 

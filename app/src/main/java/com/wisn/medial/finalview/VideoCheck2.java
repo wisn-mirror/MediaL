@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -15,47 +16,66 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.wisn.medial.src.Constants;
 import com.wisn.medial.tianmao.VideoViewHoderM;
 
+import java.util.HashMap;
+
 /**
  * Created by Wisn on 2019-05-09 18:23.
  */
 public class VideoCheck2 {
     private String TAG = "VideoCheck";
     public ExoPlayer player;
-    private int adapterPosition;
-    private View currentPlayView;
+    private int lastPlayPosition = -1;
+    VideoViewHoderM videoViewHoderM;
+    private RecyclerView recycleview;
+    public String currentPlayUrl;
+    HashMap<String, Long> playPosition = new HashMap<>();
 
+    public void releasePlayer() {
+        if (player != null) {
+//            player.getCurrentPosition();
+            if (TextUtils.isEmpty(currentPlayUrl)) {
+                playPosition.put(currentPlayUrl, player.getCurrentPosition());
+            }
+            player.release();
+//            player.seekToDefaultPosition();
+        }
+    }
 
     public void playPosition(VideoViewHoderM videoViewHoderM) {
+        videoViewHoderM.preview();
         int index = 0;
         if (videoViewHoderM.getAdapterPosition() == 3) {
-            index = 1;
+            index = 0;
         } else if (videoViewHoderM.getAdapterPosition() == 8) {
-            index = 2;
+            index = 1;
         } else if (videoViewHoderM.getAdapterPosition() == 14) {
-            index = 3;
+            index = 2;
         } else if (videoViewHoderM.getAdapterPosition() == 20) {
-            index = 4;
+            index = 3;
         }
-        if (player != null) player.release();
+        releasePlayer();
         player = ExoPlayerFactory.newSimpleInstance(videoViewHoderM.playerView.getContext());
         videoViewHoderM.playerView.setPlayer(player);
-        currentPlayView = videoViewHoderM.playerView;
+        this.videoViewHoderM = videoViewHoderM;
         player.setPlayWhenReady(true);
         if (player.getPlaybackState() == Player.STATE_IDLE) {
+            currentPlayUrl = Constants.ip + Constants.local_resvideo[index];
             ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(
-                    new DefaultHttpDataSourceFactory("wisn")).createMediaSource(Uri.parse(Constants.ip + Constants.local_resvideo[index]));
+                    new DefaultHttpDataSourceFactory("wisn")).createMediaSource(Uri.parse(currentPlayUrl));
             player.setRepeatMode(Player.REPEAT_MODE_ALL);
             player.prepare(mediaSource, true, false);
             player.addListener(new Player.DefaultEventListener() {
                 @Override
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     String stateString;
-                    // actually playing media
                     if (playWhenReady && playbackState == Player.STATE_READY) {
                         Log.d(TAG, "onPlayerStateChanged: actually playing media");
                         videoViewHoderM.preview.setVisibility(View.GONE);
                         videoViewHoderM.playerView.setVisibility(View.VISIBLE);
-//                        player.seekTo();
+                        /*long log = playPosition.get(currentPlayUrl);
+                        if (log > 0) {
+                            player.seekTo(log);
+                        }*/
                     }
                     switch (playbackState) {
                         case Player.STATE_IDLE:
@@ -104,7 +124,6 @@ public class VideoCheck2 {
         int[] result = new int[2];
         result[0] = findPosition(firstVisibleItemPositions, true);
         result[1] = findPosition(lastVisibleItemPositions, false);
-//            Log.d(TAG, "childCount:" + childCount + "  first：" + first+ " last：" + last);
         return result;
     }
 
@@ -118,50 +137,62 @@ public class VideoCheck2 {
 
     //检查子view是否在父view显示布局里面
     private boolean isPlayRange(View childView, View parentView) {
-
-        if (childView == null || parentView == null) {
-            return false;
-        }
-
+        if (childView == null || parentView == null) return false;
         int[] childLocal = new int[2];
         childView.getLocationOnScreen(childLocal);
-
         int[] parentLocal = new int[2];
         parentView.getLocationOnScreen(parentLocal);
-
-        boolean playRange = childLocal[1] >= parentLocal[1] &&
-                childLocal[1] <= parentLocal[1] + parentView.getHeight() - childView.getHeight();
-
+        boolean playRange = childLocal[1] >= (parentLocal[1] - childView.getHeight()) &&
+                childLocal[1] <= (parentLocal[1] + parentView.getHeight() - childView.getHeight() / 4);
+        Log.d(TAG, playRange + " childLocal[1]  " + childLocal[1] + " parentLocal[1]: " + parentLocal[1] + " " + childView.getHeight() + " " + parentView.getHeight());
         return playRange;
     }
 
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (currentPlayView != null) {
-            boolean playRange = isPlayRange(currentPlayView, recyclerView);
-            if (!playRange) {
-//                mMediaPlayerTool.reset();
-                if (player != null) player.release();
+//        onScrolledCheck(recyclerView);
+    }
 
+    public void onScrolledCheck(RecyclerView recyclerView) {
+        if (videoViewHoderM != null && videoViewHoderM.itemView != null) {
+            boolean playRange = isPlayRange(videoViewHoderM.itemView, recyclerView);
+            if (!playRange) {
+                videoViewHoderM.preview();
+                releasePlayer();
+                lastPlayPosition = -1;
             }
         }
     }
 
 
+    public void onPageSelected(RecyclerView recyclerView) {
+        if (videoViewHoderM != null) {
+            videoViewHoderM.preview();
+            releasePlayer();
+        }
+    }
+
+    public void initCheck(RecyclerView recyclerView) {
+        if (this.recycleview != recyclerView) {
+            lastPlayPosition = -1;
+            checkVideo(recyclerView, RecyclerView.SCROLL_STATE_IDLE);
+        }
+
+    }
+
     public void checkVideo(RecyclerView recyclerView, int newState) {
+        this.recycleview = recyclerView;
+        Log.d(TAG, " childLocal[1] SCROLL_STATE_IDLE  " + newState);
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            onScrolledCheck(recyclerView);
             // 当不滚动时
             int childCount = recyclerView.getChildCount();
-//            Log.d(TAG, "childCount:" + childCount);
             VideoViewHoderM videoViewHoder = null;
             for (int i = 0; i < childCount; i++) {
                 View view = recyclerView.getChildAt(i);
                 if (view == null) continue;
                 RecyclerView.ViewHolder childViewHolder = recyclerView.getChildViewHolder(view);
                 if (null != childViewHolder) {
-//                    Log.d(TAG, "childViewHolder:" + childViewHolder + "  ViewHoderMType：" + (childViewHolder instanceof ViewHoderM) + "  VideoViewHoderMType：" + (childViewHolder instanceof VideoViewHoderM));
                     if (childViewHolder instanceof VideoViewHoderM) {
-                        int[] location = new int[2];
-                        childViewHolder.itemView.getLocationOnScreen(location);
                         videoViewHoder = (VideoViewHoderM) childViewHolder;
                         break;
                     }
@@ -169,20 +200,13 @@ public class VideoCheck2 {
             }
             if (videoViewHoder != null) {
                 int playosition = videoViewHoder.getAdapterPosition();
-                if (playosition != adapterPosition) {
+                if (playosition != lastPlayPosition) {
                     playPosition(videoViewHoder);
-                    adapterPosition = playosition;
+                    lastPlayPosition = playosition;
                 }
             }
 
-        } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-            // Log.i("SCROLL_STATE_DRAGGING", "手滑动：SCROLL_STATE_DRAGGING");
-        } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-            // Log.i("SCROLL_STATE_SETTLING", "松开惯性滑动：SCROLL_STATE_SETTLING");
         }
     }
 
-    public void setPlayPosition(int adapterPosition) {
-        this.adapterPosition = adapterPosition;
-    }
 }

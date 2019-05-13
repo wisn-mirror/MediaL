@@ -29,12 +29,12 @@ public class VideoViewHoderM extends RecyclerView.ViewHolder {
         cardview = itemView.findViewById(R.id.cardview);
         playerView = itemView.findViewById(R.id.playerView);
         preview = itemView.findViewById(R.id.preview);
-        itemView.setLayoutParams(new ViewGroup.LayoutParams((int) (screenWidth / 2.4),  (screenWidth / 2)));
+        itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  (screenWidth / 2)));
     }
 
     public void preview() {
         preview.setVisibility(View.VISIBLE);
-        playerView.setVisibility(View.GONE);
+        playerView.setVisibility(View.INVISIBLE);
         GlideApp.with(preview.getContext()).load(Constants.res[0]).into(preview);
     }
 

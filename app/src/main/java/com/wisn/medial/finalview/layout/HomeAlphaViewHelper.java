@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wisn.medial.finalview.alpha;
+package com.wisn.medial.finalview.layout;
 
 import android.support.annotation.NonNull;
 import android.view.View;

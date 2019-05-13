@@ -21,8 +21,6 @@ import android.graphics.Canvas;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 
-import com.wisn.medial.finalview.alpha.HomeAlphaFrameLayout;
-
 
 /**
  * @author cginechen

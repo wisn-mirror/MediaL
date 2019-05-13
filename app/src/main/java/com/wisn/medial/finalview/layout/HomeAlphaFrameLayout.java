@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package com.wisn.medial.finalview.alpha;
+package com.wisn.medial.finalview.layout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 /**
  * 在 pressed 和 disabled 时改变 View 的透明度
  */
-public class HomeAlphaRelativeLayout extends RelativeLayout {
+public class HomeAlphaFrameLayout extends FrameLayout {
 
     private HomeAlphaViewHelper mAlphaViewHelper;
 
-    public HomeAlphaRelativeLayout(Context context) {
+    public HomeAlphaFrameLayout(Context context) {
         super(context);
     }
 
-    public HomeAlphaRelativeLayout(Context context, AttributeSet attrs) {
+    public HomeAlphaFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public HomeAlphaRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HomeAlphaFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -75,5 +75,4 @@ public class HomeAlphaRelativeLayout extends RelativeLayout {
     public void setChangeAlphaWhenDisable(boolean changeAlphaWhenDisable) {
         getAlphaViewHelper().setChangeAlphaWhenDisable(changeAlphaWhenDisable);
     }
-
 }

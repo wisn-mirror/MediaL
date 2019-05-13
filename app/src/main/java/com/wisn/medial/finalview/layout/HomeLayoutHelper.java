@@ -31,11 +31,12 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import com.wisn.medial.R;
-import com.wisn.medial.finalview.helper.HomeResHelper;
 
 import java.lang.ref.WeakReference;
 
@@ -113,7 +114,7 @@ public class HomeLayoutHelper implements IHomeLayout {
         mMode = new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
         mClipPaint = new Paint();
         mClipPaint.setAntiAlias(true);
-        mShadowAlpha = HomeResHelper.getAttrFloatValue(context, R.attr.qmui_general_shadow_alpha);
+        mShadowAlpha =  getAttrFloatValue(context, R.attr.qmui_general_shadow_alpha);
         mBorderRect = new RectF();
 
         int radius = 0, shadow = 0;
@@ -196,7 +197,7 @@ public class HomeLayoutHelper implements IHomeLayout {
             ta.recycle();
         }
         if (shadow == 0 && useThemeGeneralShadowElevation) {
-            shadow = HomeResHelper.getAttrDimen(context, R.attr.qmui_general_shadow_elevation);
+            shadow =  getAttrDimen(context, R.attr.qmui_general_shadow_elevation);
 
         }
         setRadiusAndShadow(radius, mHideRadiusSide, shadow, mShadowAlpha);
@@ -204,7 +205,7 @@ public class HomeLayoutHelper implements IHomeLayout {
 
     @Override
     public void setUseThemeGeneralShadowElevation() {
-        mShadowElevation = HomeResHelper.getAttrDimen(mContext, R.attr.qmui_general_shadow_elevation);
+        mShadowElevation =  getAttrDimen(mContext, R.attr.qmui_general_shadow_elevation);
         setRadiusAndShadow(mRadius, mHideRadiusSide, mShadowElevation, mShadowAlpha);
     }
 
@@ -736,5 +737,23 @@ public class HomeLayoutHelper implements IHomeLayout {
 
     public static boolean useFeature() {
         return Build.VERSION.SDK_INT >= 21;
+    }
+
+    public static float getAttrFloatValue(Context context, int attrRes){
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(attrRes, typedValue, true);
+        return typedValue.getFloat();
+    }
+
+
+    public static int getAttrDimen(Context context, int attrRes){
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(attrRes, typedValue, true);
+        return TypedValue.complexToDimensionPixelSize(typedValue.data, getDisplayMetrics(context));
+    }
+
+
+    public static DisplayMetrics getDisplayMetrics(Context context) {
+        return context.getResources().getDisplayMetrics();
     }
 }

@@ -99,7 +99,7 @@ public class MView extends RelativeLayout {
         if (isDragging) {
             mWavePulling = true;
             mHeadHeight = height;
-            mWaveHeight = Math.max(offset - height * 0.6f, mWaveHeightPre) * .8f;
+            mWaveHeight = Math.max(offset*1.6f - height * 0.6f, mWaveHeightPre) * .8f;
         }
     }
 

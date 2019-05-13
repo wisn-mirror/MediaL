@@ -19,6 +19,7 @@ package com.wisn.medial.finalview.layout;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.ViewGroup;
 
 /**
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 
 public abstract class HomePagerAdapter extends PagerAdapter {
     private SparseArray<Object> mScrapItems = new SparseArray<>();
+    private View currentview;
 
     public HomePagerAdapter() {
     }
@@ -43,6 +45,16 @@ public abstract class HomePagerAdapter extends PagerAdapter {
     protected abstract void populate(ViewGroup container, Object item, int position);
 
     protected abstract void destroy(ViewGroup container, int position, Object object);
+
+    @Override
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        super.setPrimaryItem(container, position, object);
+        this.currentview = (View) object;
+    }
+
+    public View getCurrentview() {
+        return currentview;
+    }
 
     @Override
     public final Object instantiateItem(ViewGroup container, int position) {

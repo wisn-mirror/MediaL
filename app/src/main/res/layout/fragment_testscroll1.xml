@@ -14,7 +14,7 @@
     <com.wisn.medial.tianmao.MView
         android:id="@+id/mark"
         android:layout_width="match_parent"
-        android:layout_height="480dp" />
+        android:layout_height="520dp" />
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
         android:layout_marginTop="70dp"

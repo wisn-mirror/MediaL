@@ -84,7 +84,7 @@ public class TestScrollFragment2 extends Fragment {
         mToolbarSearch = view.findViewById(R.id.toolbar_search);
         header.setBackgroundColor(getResources().getColor(R.color.trans));
         header.setmView(mark);
-        mark.setConfig(DensityUtil.dp2px(260), DensityUtil.dp2px(20));
+        mark.setConfig(DensityUtil.dp2px(260), DensityUtil.dp2px(60));
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

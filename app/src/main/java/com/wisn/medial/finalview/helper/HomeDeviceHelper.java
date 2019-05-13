@@ -27,8 +27,10 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -66,7 +68,7 @@ public class HomeDeviceHelper {
             } catch (Exception e) {
 //                QMUILog.printErrStackTrace(TAG, e, "read file error");
             } finally {
-                HomeLangHelper.close(fileInputStream);
+               close(fileInputStream);
             }
         }
 
@@ -80,6 +82,15 @@ public class HomeDeviceHelper {
             sFlymeVersionName = getLowerCaseName(properties, getMethod, KEY_FLYME_VERSION_NAME);
         } catch (Exception e) {
 //            QMUILog.printErrStackTrace(TAG, e, "read SystemProperties error");
+        }
+    }
+    public static void close(Closeable c) {
+        if (c != null) {
+            try {
+                c.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

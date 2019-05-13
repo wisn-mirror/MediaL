@@ -13,7 +13,6 @@ import com.wisn.medial.ad.VideoViewActivity;
 import com.wisn.medial.download.DownloadListActivity;
 import com.wisn.medial.finalview.Stick2Activity;
 import com.wisn.medial.imagelist.ImageListActivity;
-import com.wisn.medial.tianmao.StickActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bt_demo:
 //                startActivity(new Intent(this, SlideDemo.class));
-                startActivity(new Intent(this, StickActivity.class));
+//                startActivity(new Intent(this, StickActivity.class));
+                startActivity(new Intent(this, Stick2Activity.class));
+
                 break;
 
         }
