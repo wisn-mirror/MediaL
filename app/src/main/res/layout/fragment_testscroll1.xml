@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/marktop"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+
+    <com.wisn.medial.tianmao.MView
+        android:id="@+id/mark"
+        android:layout_width="match_parent"
+        android:layout_height="480dp" />
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/SwipeRefreshLayout"
+        android:layout_marginTop="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.wisn.medial.tianmao.mClassicsHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.wisn.medial.finalview.nestedScroll.HomeContinuousNestedScrollLayout
+            android:id="@+id/coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <RelativeLayout
+        android:id="@+id/mainfragment_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent">
+
+        <include
+            android:id="@+id/toolbar_small"
+            layout="@layout/home_include_toolbar_small" />
+
+        <include
+            android:id="@+id/toolbar_search"
+            layout="@layout/home_include_toolbar_search" />
+    </RelativeLayout>
+    <!-- </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+</RelativeLayout>

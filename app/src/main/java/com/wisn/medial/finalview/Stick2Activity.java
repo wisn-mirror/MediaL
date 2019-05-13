@@ -12,14 +12,14 @@ import com.wisn.medial.R;
  */
 public class Stick2Activity extends AppCompatActivity {
     private FrameLayout fl_content;
-    private TestScrollFragment imageListFragment;
+    private TestScrollFragment2 imageListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         fl_content = findViewById(R.id.fl_content);
-        imageListFragment = new TestScrollFragment();
+        imageListFragment = new TestScrollFragment2();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fl_content, imageListFragment).commitAllowingStateLoss();
     }

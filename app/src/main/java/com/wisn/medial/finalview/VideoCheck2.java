@@ -1,4 +1,4 @@
-package com.wisn.medial.tianmao;
+package com.wisn.medial.finalview;
 
 import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,15 +13,17 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.wisn.medial.src.Constants;
+import com.wisn.medial.tianmao.VideoViewHoderM;
 
 /**
  * Created by Wisn on 2019-05-09 18:23.
  */
-public class VideoCheck {
+public class VideoCheck2 {
     private String TAG = "VideoCheck";
     public ExoPlayer player;
     private int adapterPosition;
-    View currentPlayView;
+    private View currentPlayView;
+
 
     public void playPosition(VideoViewHoderM videoViewHoderM) {
         int index = 0;
@@ -37,7 +39,7 @@ public class VideoCheck {
         if (player != null) player.release();
         player = ExoPlayerFactory.newSimpleInstance(videoViewHoderM.playerView.getContext());
         videoViewHoderM.playerView.setPlayer(player);
-        currentPlayView=videoViewHoderM.playerView;
+        currentPlayView = videoViewHoderM.playerView;
         player.setPlayWhenReady(true);
         if (player.getPlaybackState() == Player.STATE_IDLE) {
             ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(
@@ -53,6 +55,7 @@ public class VideoCheck {
                         Log.d(TAG, "onPlayerStateChanged: actually playing media");
                         videoViewHoderM.preview.setVisibility(View.GONE);
                         videoViewHoderM.playerView.setVisibility(View.VISIBLE);
+//                        player.seekTo();
                     }
                     switch (playbackState) {
                         case Player.STATE_IDLE:

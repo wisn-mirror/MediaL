@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -29,7 +29,7 @@ public class VideoViewHoderM extends RecyclerView.ViewHolder {
         cardview = itemView.findViewById(R.id.cardview);
         playerView = itemView.findViewById(R.id.playerView);
         preview = itemView.findViewById(R.id.preview);
-        cardview.setLayoutParams(new FrameLayout.LayoutParams((int) (screenWidth / 2.4), screenWidth / 2));
+        itemView.setLayoutParams(new ViewGroup.LayoutParams((int) (screenWidth / 2.4),  (screenWidth / 2)));
     }
 
     public void preview() {
