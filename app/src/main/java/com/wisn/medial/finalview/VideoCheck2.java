@@ -8,9 +8,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.wisn.medial.src.Constants;
@@ -23,7 +24,7 @@ import java.util.HashMap;
  */
 public class VideoCheck2 {
     private String TAG = "VideoCheck";
-    public ExoPlayer player;
+    public SimpleExoPlayer player;
     private int lastPlayPosition = -1;
     VideoViewHoderM videoViewHoderM;
     private RecyclerView recycleview;
@@ -31,13 +32,13 @@ public class VideoCheck2 {
     HashMap<String, Long> playPosition = new HashMap<>();
 
     public void releasePlayer() {
+        lastPlayPosition=-1;
         if (player != null) {
-//            player.getCurrentPosition();
-            if (TextUtils.isEmpty(currentPlayUrl)) {
+            if (!TextUtils.isEmpty(currentPlayUrl)) {
                 playPosition.put(currentPlayUrl, player.getCurrentPosition());
             }
+            player.setPlayWhenReady(false);
             player.release();
-//            player.seekToDefaultPosition();
         }
     }
 
@@ -56,6 +57,7 @@ public class VideoCheck2 {
         releasePlayer();
         player = ExoPlayerFactory.newSimpleInstance(videoViewHoderM.playerView.getContext());
         videoViewHoderM.playerView.setPlayer(player);
+        player.setVolume(0f);
         this.videoViewHoderM = videoViewHoderM;
         player.setPlayWhenReady(true);
         if (player.getPlaybackState() == Player.STATE_IDLE) {
@@ -63,19 +65,28 @@ public class VideoCheck2 {
             ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(
                     new DefaultHttpDataSourceFactory("wisn")).createMediaSource(Uri.parse(currentPlayUrl));
             player.setRepeatMode(Player.REPEAT_MODE_ALL);
+            //4倍速度播放
+            PlaybackParameters param = new PlaybackParameters(1);
+            player.setPlaybackParameters(param);
             player.prepare(mediaSource, true, false);
+            if(playPosition.containsKey(currentPlayUrl)){
+                try {
+                    long log = playPosition.get(currentPlayUrl);
+                    if (log > 0) {
+                        player.seekTo(log);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             player.addListener(new Player.DefaultEventListener() {
                 @Override
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                     String stateString;
                     if (playWhenReady && playbackState == Player.STATE_READY) {
                         Log.d(TAG, "onPlayerStateChanged: actually playing media");
-                        videoViewHoderM.preview.setVisibility(View.GONE);
-                        videoViewHoderM.playerView.setVisibility(View.VISIBLE);
-                        /*long log = playPosition.get(currentPlayUrl);
-                        if (log > 0) {
-                            player.seekTo(log);
-                        }*/
+                        videoViewHoderM.unPreview();
                     }
                     switch (playbackState) {
                         case Player.STATE_IDLE:
@@ -204,6 +215,9 @@ public class VideoCheck2 {
                     playPosition(videoViewHoder);
                     lastPlayPosition = playosition;
                 }
+            }else{
+                releasePlayer();
+
             }
 
         }

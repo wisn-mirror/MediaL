@@ -6,12 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.wisn.medial.R;
@@ -46,7 +49,7 @@ public class ExoPlayerActivity extends AppCompatActivity {
     private static final String TAG = "ExoPlayerActivity";
     private PlayerView playerView;
 
-    private ExoPlayer player;
+    private SimpleExoPlayer player;
 
     private boolean playWhenReady = true;
     private int currentWindow;
@@ -60,15 +63,15 @@ public class ExoPlayerActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
                 WindowManager.LayoutParams. FLAG_FULLSCREEN);
         playerView = findViewById(R.id.playerView);
-        player = ExoPlayerFactory.newSimpleInstance(this);
-//        player = ExoPlayerFactory.newSimpleInstance( new DefaultRenderersFactory(this),
-//        new DefaultTrackSelector(), new DefaultLoadControl());
-
+//        player = ExoPlayerFactory.newSimpleInstance(this);
+        player = ExoPlayerFactory.newSimpleInstance(this, new DefaultRenderersFactory(this),
+        new DefaultTrackSelector(), new DefaultLoadControl());
         playerView.setPlayer(player);
         player.setPlayWhenReady(playWhenReady);
 //        player.seekTo(currentWindow, playbackPosition);
 //        Uri uri = Uri.parse(Constants.ip + "video_ccc.mp4");
 //        MediaSource mediaSource = buildMediaSource(uri);
+
         List<Uri> urls=new ArrayList<>();
         for(String res:Constants.local_resvideo){
             urls.add(Uri.parse(Constants.ip + res));

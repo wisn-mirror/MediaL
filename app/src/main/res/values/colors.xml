@@ -5,6 +5,8 @@
     <color name="colorAccent">#e84e40</color>
     <color name="mainColor">#5677fc</color>
     <color name="trans">#00000000</color>
+    <color name="aaa">#F80</color>
+    <color name="gray">#CCC</color>
     <color name="qmui_config_color_separator">#DEE0E2</color>
 
 

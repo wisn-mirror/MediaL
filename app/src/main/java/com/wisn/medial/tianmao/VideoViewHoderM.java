@@ -37,6 +37,10 @@ public class VideoViewHoderM extends RecyclerView.ViewHolder {
         playerView.setVisibility(View.INVISIBLE);
         GlideApp.with(preview.getContext()).load(Constants.res[0]).into(preview);
     }
+    public void unPreview() {
+        preview.setVisibility(View.INVISIBLE);
+        playerView.setVisibility(View.VISIBLE);
+    }
 
 
 }

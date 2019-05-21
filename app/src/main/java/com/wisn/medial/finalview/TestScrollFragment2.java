@@ -224,7 +224,6 @@ public class TestScrollFragment2 extends Fragment {
                              int color = (int) mMArgbEvaluator.evaluate(positionOffset, colorBg[position % colorBg.length],
                                     colorBg[(position + 1) % colorBg.length]);
                             Log.d("onPageScrolled", "position:" + position + " positionOffset:" + positionOffset + " color：" + color);
-
                             mark.setColor(color);
                             marktop.setBackgroundColor(color);
 
