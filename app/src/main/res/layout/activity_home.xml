@@ -17,6 +17,7 @@
         android:id="@+id/tottom"
         android:layout_width="match_parent"
         android:layout_height="90dp"
+        android:visibility="gone"
         android:background="@color/trans"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">

@@ -10,6 +10,7 @@ import android.view.View;
 import com.wisn.medial.ad.ExoPlayerActivity;
 import com.wisn.medial.ad.ImageSlideAcitivity;
 import com.wisn.medial.ad.VideoViewActivity;
+import com.wisn.medial.compressor.CompressorActivity;
 import com.wisn.medial.download.DownloadListActivity;
 import com.wisn.medial.finalview.Stick2Activity;
 import com.wisn.medial.imagelist.ImageListActivity;
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,//存储
                     Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
-//        startActivity(new Intent(this, Stick2Activity.class));
+//        startActivity(new Intent(this, TestMoreActivity.class));
+        startActivity(new Intent(this, Stick2Activity.class));
 
     }
 
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bt_downloadlist:
                 startActivity(new Intent(this, DownloadListActivity.class));
                 break;
+
             case R.id.bt_scale:
                 startActivity(new Intent(this, ScaleActivity.class));
                 break;
@@ -59,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(new Intent(this, SlideDemo.class));
 //                startActivity(new Intent(this, StickActivity.class));
                 startActivity(new Intent(this, Stick2Activity.class));
-
+                break;
+            case R.id.bt_compressor:
+                startActivity(new Intent(this, CompressorActivity.class));
                 break;
 
         }

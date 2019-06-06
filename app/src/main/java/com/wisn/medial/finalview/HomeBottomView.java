@@ -140,7 +140,9 @@ public class HomeBottomView extends HomeContinuousNestedBottomDelegateLayout {
 
                     @Override
                     public int getItemViewType(int position) {
-                        if (position == 3 || position == 8 || position == 14 || position == 20) {
+                        if (position == 1|| position == 3 || position == 5 || position == 7||
+                                position == 9|| position == 11 || position == 13 || position == 15||
+                                position == 17|| position == 19 || position == 21 || position == 22) {
                             return video;
                         } else {
                             return product;
