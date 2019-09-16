@@ -47,7 +47,10 @@
             android:name=".ad.ExoPlayerActivity"
             android:theme="@style/activity" />
         <activity
-            android:name=".imagelist.FullScreenImageActivity"
+            android:name=".imagelist.preview.FullScreenImageActivity"
+            android:theme="@style/TransparentWindow" />
+        <activity
+            android:name=".imagelist.preview.FullScreenImageActivity2"
             android:theme="@style/TransparentWindow" />
     </application>
 

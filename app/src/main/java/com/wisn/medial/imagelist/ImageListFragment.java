@@ -21,6 +21,8 @@ import android.widget.RadioGroup;
 
 import com.wisn.medial.GlideApp;
 import com.wisn.medial.R;
+import com.wisn.medial.imagelist.preview.FullScreenImageActivity;
+import com.wisn.medial.imagelist.preview.FullScreenImageActivity2;
 import com.wisn.medial.src.Constants;
 
 import java.util.List;
@@ -98,7 +100,7 @@ public class ImageListFragment extends Fragment {
                             //获取第一个可见view的位置
                             int firstItemPosition = layout.findFirstVisibleItemPosition();
 
-                            Intent intent = new Intent(getContext(), FullScreenImageActivity.class);
+                            Intent intent = new Intent(getContext(), FullScreenImageActivity2.class);
                             intent.putExtra(FullScreenImageActivity.EXTRA_DEFAULT_INDEX, position);
                             intent.putExtra(FullScreenImageActivity.lastItemPosition, lastItemPosition);
                             intent.putExtra(FullScreenImageActivity.firstItemPosition, firstItemPosition);
