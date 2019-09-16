@@ -22,8 +22,6 @@ import com.download.core.listener.assist.Listener1Assist;
 import com.wisn.medial.R;
 import com.wisn.medial.src.Constants;
 
-import java.io.File;
-
 /**
  * Created by Wisn on 2019-04-23 15:07.
  */
@@ -60,8 +58,9 @@ public class DownloadListActivity extends Activity {
             case R.id.downloadBatch:
                 // start
                 final long startTime = SystemClock.uptimeMillis();
+
                  final DownloadContext.Builder builder = new DownloadContext.QueueSet()
-                        .setParentPathFile(new File(path))
+                        .setParentPathFile(this.getCacheDir())
                         .setMinIntervalMillisCallbackProcess(300)
                         .commit();
                 Log.d(TAG, "before bind bunch task consume "
@@ -146,7 +145,7 @@ public class DownloadListActivity extends Activity {
     public void test1() {
         task = new DownloadTask
 //                .Builder(URL, new File(path+"/downloadtest/"))
-                .Builder(URL, new File(path))
+                .Builder(URL, this.getCacheDir())
                 .setFilename(System.currentTimeMillis() + ".apk")
                 // if there is the same task has been completed download, just delete it and
                 // re-download automatically.

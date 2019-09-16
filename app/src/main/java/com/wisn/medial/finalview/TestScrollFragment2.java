@@ -176,7 +176,7 @@ public class TestScrollFragment2 extends Fragment {
 
     private void dealTopRecycleView(HomeContinuousNestedTopRecyclerView mTopRecyclerView) {
         List<CustomData> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 1; i++) {
             list.add(new CustomData(Constants.res[i], String.valueOf(i), true));
         }
         mTopRecyclerView.setAdapter(new RecyclerView.Adapter() {
@@ -216,6 +216,7 @@ public class TestScrollFragment2 extends Fragment {
                             .setPages(list, new CustomViewHolder2())
                             .setBannerStyle(BannerConfig.NOT_INDICATOR)
                             .setBannerAnimation(Transformer.Scale)
+                            .setViewPagerIsScroll(false)
                             .start();
                     initIndicator(indicator);
                     banner1.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

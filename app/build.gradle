@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wisn.medial"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -15,9 +15,26 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
+            properties.load(inputStream)
+            storeFile file(properties.getProperty('RELEASE_STOREFILE'))
+            keyAlias properties.getProperty('RELEASE_KEY_ALIAS')
+            keyPassword properties.getProperty('RELEASE_KEY_PASSWORD')
+            storePassword properties.getProperty('RELEASE_STOREPASSWORD')
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

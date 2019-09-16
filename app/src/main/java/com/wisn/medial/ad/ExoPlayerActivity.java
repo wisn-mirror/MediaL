@@ -74,7 +74,8 @@ public class ExoPlayerActivity extends AppCompatActivity {
 
         List<Uri> urls=new ArrayList<>();
         for(String res:Constants.local_resvideo){
-            urls.add(Uri.parse(Constants.ip + res));
+//            urls.add(Uri.parse(Constants.ip + res));
+            urls.add(Uri.parse( "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312143927981075.mp4"));
         }
         MediaSource mediaSource = buildMediaSources(urls);
         player.prepare(mediaSource, true, false);

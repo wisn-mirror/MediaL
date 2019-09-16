@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.wisn.medial.ad.ExoPlayerActivity;
 import com.wisn.medial.ad.ImageSlideAcitivity;
@@ -30,8 +31,11 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
 //        startActivity(new Intent(this, TestMoreActivity.class));
-        startActivity(new Intent(this, Stick2Activity.class));
-
+//        startActivity(new Intent(this, Stick2Activity.class));
+        TextView info = findViewById(R.id.info);
+        StringBuffer sb = new StringBuffer();
+        sb.append("sdk:" + Build.VERSION.SDK_INT);
+        info.setText(sb.toString());
     }
 
     public void onClick(View view) {

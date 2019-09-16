@@ -22,6 +22,42 @@
             android:label="@string/title_activity_test_more"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".imagelist.animator.AnimatorActivity" />
+        <!-- 开机启动 -->
+        <receiver
+            android:name=".DeviceStartupIntentReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <!--设备重启广播-->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+         <!--   &lt;!&ndash;安装或卸载广播&ndash;&gt;
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            &lt;!&ndash;解锁广播&ndash;&gt;
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_USER_PRESENT" />
+            </intent-filter>
+            &lt;!&ndash;存储卡挂载广播&ndash;&gt;
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+
+                <data android:scheme="file"></data>
+            </intent-filter>
+            &lt;!&ndash;网络状态广播&ndash;&gt;
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>-->
+        </receiver>
 
         <uses-library
             android:name="org.apache.http.legacy"

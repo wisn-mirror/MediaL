@@ -100,4 +100,12 @@
         android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@+id/bt_imglist"
         app:layout_constraintLeft_toRightOf="@+id/bt_demo"/>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="387dp"
+        android:layout_height="433dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="159dp" />
 </android.support.constraint.ConstraintLayout>
